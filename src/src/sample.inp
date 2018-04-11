@@ -1,0 +1,13 @@
+int a = 5.1;
+int b = 1;
+float d = 5.1;
+int c = 1 + d;
+
+while a >= 1+2 do
+begin
+    b = b * a;
+    a = a - 1;
+end;
+ 
+print b;
+print a;

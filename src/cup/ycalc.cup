@@ -1,0 +1,120 @@
+package src;
+import java_cup.runtime.*;
+
+
+terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN,
+                   ASS, IF, THEN, PRINT, WHILE,  DO, BEGIN,  END;
+terminal           EQ, NOTEQ, LESSER, LESSEREQ, GREATER, GREATEREQ;
+terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF;
+terminal Integer   INT;
+terminal Float     FLOAT;
+terminal Integer   BOOLEAN;
+terminal String    ID;
+
+non terminal Object             program;
+non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
+non terminal Lstat              statement_list;
+non terminal Aexp               expr, factor, term;
+non terminal Aexp               boolop;
+non terminal Integer            type;
+
+precedence left boolop, vardec, assignment;
+
+program         ::= statement_list:s
+                    {: s.execute(); :};
+
+
+statement_list  ::= statement_list:l statement_part:s
+                    {: RESULT = new Lstat(l,s) ; :}
+                |   statement_part:s
+                    {: RESULT = new Lstat(s); :}
+                ;
+
+statement_part  ::= statement:s
+                    {: RESULT = s; :}
+                SEMI;
+
+statement       ::= assignment:s
+                    {: RESULT = s; :}
+                | vardec:s
+                    {: RESULT = s; :}
+                | ifthen:s
+                    {: RESULT = s; :}
+                | print:s
+                    {: RESULT = s; :}
+                | while:s
+                    {: RESULT = s; :}
+                | BEGIN statement_list:s END
+                    {: RESULT = Astat.block(s); :}
+                ;
+
+while           ::= WHILE boolop:e DO statement:s
+                    {: RESULT = Astat.whileloop(e,s); :}
+                ;
+
+print           ::= PRINT expr:e
+                    {: RESULT = Astat.print(e); :}
+                ;
+
+ifthen          ::= IF expr:e THEN statement:s
+                    {: RESULT = Astat.ifthen(e,s); :}
+                ;
+boolop          ::= expr:e0 EQ expr:e1
+                    {:
+                        RESULT = new Aexp(new Args(e0,e1), sym.EQ);
+                    :}
+                    |expr:e0 NOTEQ expr:e1
+                    {:
+                        RESULT = new Aexp(new Args(e0,e1), sym.NOTEQ);
+                    :}
+                    |expr:e0 GREATEREQ expr:e1
+                    {:
+                        RESULT = new Aexp(new Args(e0,e1), sym.GREATEREQ);
+                    :}
+                    |expr:e0 GREATER expr:e1
+                    {:
+                        RESULT = new Aexp(new Args(e0,e1), sym.GREATER);
+                    :}
+                    |expr:e0 LESSEREQ expr:e1
+                    {:
+                        RESULT = new Aexp(new Args(e0,e1), sym.LESSEREQ);
+                    :}
+                    |expr:e0 LESSER expr:e1
+                    {:
+                        RESULT = new Aexp(new Args(e0,e1), sym.LESSER);
+                    :};
+vardec          ::= type:t ID:i ASS expr:e
+                    {: RESULT = Astat.declare(t,i,e); :};
+type            ::= INTDEF:i
+                    {: RESULT = i; :}
+                |  FLOATDEF:f
+                    {: RESULT = f; :};
+
+assignment      ::= ID:i ASS expr:e
+                    {: RESULT = Astat.assignment(i,e); :}
+                ;
+
+expr            ::= expr:e PLUS term:t
+                    {: RESULT = new Aexp(new Args(e,t), sym.PLUS); :}
+                | expr:e MINUS term:t
+                    {: RESULT = new Aexp(new Args(e,t), sym.MINUS); :}
+                | term:t
+                    {: RESULT = t; :};
+
+term            ::= term:t TIMES factor:f
+                    {: RESULT = new Aexp(new Args(t,f), sym.TIMES); :}
+                | term:t DIVIDE factor:f
+                    {: RESULT = new Aexp(new Args(t,f), sym.DIVIDE); :}
+                | factor:f
+                    {: RESULT = f; :};
+
+factor          ::= LPAREN expr:e RPAREN
+                    {: RESULT = e; :}
+                | INT:i
+                    {: RESULT = new Aexp(i); :}
+                | FLOAT:f
+                    {: RESULT = new Aexp(f); :}
+                | BOOLEAN:b
+                    {: RESULT = new Aexp(b); :}
+                | ID:i
+                    {: RESULT = new Aexp(i); :};
