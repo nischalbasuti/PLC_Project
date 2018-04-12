@@ -1,9 +1,11 @@
-int a = 5.1;
+int a = 5.0;
 int b = 1;
 float d = 5.1;
 int c = 1 + d;
+boolean itis = true;
+boolean itisnot = false;
 
-while a >= 1+2 do
+while a >=1 do
 begin
     b = b * a;
     a = a - 1;

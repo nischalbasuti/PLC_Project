@@ -30,6 +30,12 @@ public class SymbolTable extends Hashtable<String,Object>{
         typeTable.put(id, type);
     }
     
+    static void declare(int type, String id, boolean value) {
+        globalTable.put(id,value);
+        System.out.println("DECLARED BOOLEAN: "+id+" "+value);
+        typeTable.put(id, type);
+    }
+    
     static Integer getType(String id) {
         return typeTable.get(id);
     }

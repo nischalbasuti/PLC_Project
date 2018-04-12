@@ -109,6 +109,7 @@ public class Astat {
         switch(type){
             case sym.INTDEF: return "int";
             case sym.FLOATDEF: return "float";
+            case sym.BOOLEANDEF: return "boolean";
         }
         
         return "wut?";

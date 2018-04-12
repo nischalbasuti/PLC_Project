@@ -108,6 +108,9 @@ id = [A-Za-z_][A-Za-z_0-9]*
     "<="               { return symbol(sym.LESSEREQ); }
     ">"                { return symbol(sym.GREATER); }
     ">="               { return symbol(sym.GREATEREQ);}
+    "and"              { return symbol(sym.AND); }
+    "or"               { return symbol(sym.OR); }
+    "not"              { return symbol(sym.NOT); }
     "if"               { return symbol(sym.IF); }
     "then"             { return symbol(sym.THEN); }
     "print"            { return symbol(sym.PRINT); }
@@ -118,8 +121,8 @@ id = [A-Za-z_][A-Za-z_0-9]*
     "int"              { return symbol(sym.INTDEF, sym.INTDEF); }
     "float"            { return symbol(sym.FLOATDEF, sym.FLOATDEF); }
     "boolean"          { return symbol(sym.BOOLEANDEF, sym.BOOLEANDEF); }
-    "true"             { return symbol(sym.BOOLEAN, new Integer(1)); }
-    "false"            { return symbol(sym.BOOLEAN, new Integer(0)); }
+    "true"             { return symbol(sym.BOOLEAN, new Boolean(true)); }
+    "false"            { return symbol(sym.BOOLEAN, new Boolean(false)); }
 
     {int}      { return symbol(sym.INT, new Integer(yytext())); }
     {float}    { return symbol(sym.FLOAT, new Float(yytext())); }

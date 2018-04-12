@@ -8,6 +8,16 @@ public class Args {
         Fi = x;
         Se = y;
     }
+    
+    Args(Aexp x) {
+        Fi = x;
+        Se = null;
+    }
+    
+    Args(boolean x) {
+        Fi = null;
+        Se = null;
+    }
 
     public Aexp getfi() {
         return Fi;

@@ -26,7 +26,12 @@ public class Aexp {
         this.type = sym.FLOATDEF;
         inum = x;        
     }
-
+    Aexp(Boolean x) {
+        eType = AexpType.BOOLEAN;
+        this.type = sym.BOOLEAN;
+        operands = new Args(x);
+        inum = (x) ? 1.0f : 0.0f;        
+    }
     Aexp(String x) {
         eType = AexpType.ID;
         id = x;        
@@ -63,6 +68,15 @@ public class Aexp {
             case sym.LESSER:
                 this.type = sym.BOOLEAN;
                 break;
+            case sym.NOT:
+                this.type = sym.BOOLEAN;
+                break;
+            case sym.AND:
+                this.type = sym.BOOLEAN;
+                break;
+            case sym.OR:
+                this.type = sym.BOOLEAN;
+                break;
         }
         if(this.type == sym.BOOLEAN){
             eType = AexpType.BOOLEAN;
@@ -77,6 +91,7 @@ public class Aexp {
         switch (this.eType) {
             case INTEGER: s = "" + inum; break;
             case FLOAT: s = "" + inum; break;
+            case BOOLEAN: s = "" + inum; break;
             case ID: s = id; break;
             case EXP:
                 switch (operator) {
@@ -149,6 +164,7 @@ public class Aexp {
                 right = operands.getse();
                 boolean tempVal = false;
                 switch(operator) {
+                    // TODO: perform type check if following are integer/float/char.
                     case sym.EQ:
                         tempVal = left.getValue() == right.getValue();
                         break;
@@ -166,6 +182,23 @@ public class Aexp {
                         break;
                     case sym.LESSER:
                         tempVal = left.getValue() < right.getValue();
+                        break;
+                    // TODO: prform type check if the following are boolean or not.
+                    case sym.NOT:
+                        tempVal = left.getValue() == 1; // check if true or not;
+                        break;
+                    case sym.OR:
+                        if(left.getValue() == 1 || right.getValue() == 1){
+                            tempVal = true;
+                        }
+                        break;
+                    case sym.AND:
+                        if(left.getValue() == 1 && right.getValue() == 1){
+                            tempVal = true;
+                        }
+                        break;
+                    default:
+                        tempVal = (inum == 1.0) ? true: false;
                         break;
                 }
                 if(tempVal == true) {

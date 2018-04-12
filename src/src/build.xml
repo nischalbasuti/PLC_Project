@@ -47,7 +47,7 @@
              classpath="${bin}/java-cup-11a.jar"
     />
 
-    <target name="init">
+    <target name="init" depends="clean">
         <mkdir dir="${classes}"/>
         <mkdir dir="${java}"/>
         <mkdir dir="${java}"/>
