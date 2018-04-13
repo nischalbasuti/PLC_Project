@@ -155,7 +155,6 @@ public class Aexp {
             case ID:
                 //expression is a variable
                 try {
-                    System.out.println("ID BIyatch "+id+" "+SymbolTable.getType(id));
                     val = SymbolTable.getValue(id);
                     this.type = SymbolTable.getType(id);                    
                 } catch (NullPointerException e) {
@@ -169,18 +168,17 @@ public class Aexp {
                 right = operands.getse();
                 //expression is a math expression
                 switch (operator) {
-
                     case sym.PLUS:
-                        val = operands.getfi().getValue() + operands.getse().getValue();
+                        val = left.getValue() + right.getValue();
                         break;
                     case sym.MINUS:
-                        val = operands.getfi().getValue() - operands.getse().getValue();
+                        val = left.getValue() - right.getValue();
                         break;
                     case sym.TIMES:
-                        val = operands.getfi().getValue() * operands.getse().getValue();
+                        val = left.getValue() * right.getValue();
                         break;
                     case sym.DIVIDE:
-                        val = operands.getfi().getValue() / operands.getse().getValue();
+                        val = left.getValue() / right.getValue();
                         break;
                     default:
                         break;
@@ -226,7 +224,7 @@ public class Aexp {
                                 tempVal = true;
                             } else if(left.getValue() == 0 && right.getValue() == 0){
                                 tempVal = true;
-                            }  
+                            }
                             break;
                         default:
                             tempVal = (inum == 1.0) ? true: false;

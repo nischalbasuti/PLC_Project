@@ -150,7 +150,7 @@ public class Astat {
             SymbolTable.declare(decType, decVariable, decExpr.getValue());
         }else if (statementType == ifthen) {
 
-            if (ifcondition.getValue() != 0) {
+            if ((int)ifcondition.getValue() == 1) {
                 ifbody.execute();
             }
             

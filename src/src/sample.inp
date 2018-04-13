@@ -3,12 +3,16 @@ int b = 1;
 int d = 5;
 int c = (1 + d);
 boolean itis = true;
-boolean itisnot = false;
+boolean itisnot = false and itis;
 
-while itis and itisnot do
+while itis do
 begin
     b = b * a;
     a = a - 1;
+    if a <= 1 then
+    begin
+        itis = false;
+    end;
 end;
  
 print b;
