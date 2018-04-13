@@ -15,10 +15,8 @@ non terminal Object             program;
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
 non terminal Lstat              statement_list;
 non terminal Aexp               expr, factor, term;
-non terminal Aexp               boolop;
+non terminal Aexp               boolExp, boolFactor, boolTerm, relation, notFactor;
 non terminal Integer            type;
-
-//precedence left boolop, vardec, assignment;
 
 program         ::= statement_list:s
                     {: s.execute(); :};
@@ -48,18 +46,46 @@ statement       ::= assignment:s
                     {: RESULT = Astat.block(s); :}
                 ;
 
-while           ::= WHILE boolop:e DO statement:s
-                    {: RESULT = Astat.whileloop(e,s); :}
-                ;
+while           ::= WHILE boolExp:e DO statement:s
+                    {: RESULT = Astat.whileloop(e,s); :};
 
-print           ::= PRINT expr:e
+print           ::= PRINT boolExp:e
                     {: RESULT = Astat.print(e); :}
                 ;
 
-ifthen          ::= IF expr:e THEN statement:s
+ifthen          ::= IF boolExp:e THEN statement:s
                     {: RESULT = Astat.ifthen(e,s); :}
                 ;
-boolop          ::= expr:e0 EQ expr:e1
+
+vardec          ::= type:t ID:i ASS boolExp:e
+                    {: RESULT = Astat.declare(t,i,e); :};
+type            ::= INTDEF:i
+                    {: RESULT = i; :}
+                |  FLOATDEF:f
+                    {: RESULT = f; :}
+                |  BOOLEANDEF:b
+                    {: RESULT = b; :};
+
+assignment      ::= ID:i ASS boolExp:e
+                    {: RESULT = Astat.assignment(i,e); :};
+
+boolExp         ::= boolExp:e OR boolTerm:t
+                    {: RESULT = new Aexp(new Args(e, t), sym.OR); :}
+                |   boolTerm:t
+                    {: RESULT = t; :};
+boolTerm        ::= boolTerm:t AND notFactor:f
+                    {: RESULT = new Aexp(new Args(t, f), sym.AND); :}
+                |   notFactor:f
+                    {: RESULT = f; :};
+notFactor       ::= NOT boolFactor:b
+                    {: RESULT = new Aexp(new Args(b), sym.NOT); :}
+                |   boolFactor:f
+                    {: RESULT = f; :};
+boolFactor      ::= BOOLEAN:b
+                    {: RESULT = new Aexp(b); :}
+                |   relation:r
+                    {: RESULT = r; :};
+relation        ::= expr:e0 EQ expr:e1
                     {:
                         RESULT = new Aexp(new Args(e0,e1), sym.EQ);
                     :}
@@ -83,36 +109,8 @@ boolop          ::= expr:e0 EQ expr:e1
                     {:
                         RESULT = new Aexp(new Args(e0,e1), sym.LESSER);
                     :}
-                    |NOT expr:e
-                    {: 
-                        RESULT = new Aexp(new Args(e), sym.NOT);
-                    :}
-                    |expr:e0 AND expr:e1
-                    {: 
-                        RESULT = new Aexp(new Args(e0, e1), sym.AND);
-                    :}
-                    |expr:e0 OR expr:e1
-                    {: 
-                        RESULT = new Aexp(new Args(e0, e1), sym.OR);
-                    :}
-                    |expr: e
-                    {:
-                        RESULT = e;
-                    :};
-
-vardec          ::= type:t ID:i ASS expr:e
-                    {: RESULT = Astat.declare(t,i,e); :};
-type            ::= INTDEF:i
-                    {: RESULT = i; :}
-                |  FLOATDEF:f
-                    {: RESULT = f; :}
-                |  BOOLEANDEF:b
-                    {: RESULT = b; :};
-
-assignment      ::= ID:i ASS expr:e
-                    {: RESULT = Astat.assignment(i,e); :}
-                ;
-
+                    | expr:e
+                    {: RESULT = e; :};
 expr            ::= expr:e PLUS term:t
                     {: RESULT = new Aexp(new Args(e,t), sym.PLUS); :}
                 | expr:e MINUS term:t
@@ -127,13 +125,11 @@ term            ::= term:t TIMES factor:f
                 | factor:f
                     {: RESULT = f; :};
 
-factor          ::= LPAREN expr:e RPAREN
+factor          ::= LPAREN boolExp:e RPAREN
                     {: RESULT = e; :}
                 | INT:i
                     {: RESULT = new Aexp(i); :}
                 | FLOAT:f
                     {: RESULT = new Aexp(f); :}
-                | BOOLEAN:b
-                    {: RESULT = new Aexp(b); :}
                 | ID:i
                     {: RESULT = new Aexp(i); :};

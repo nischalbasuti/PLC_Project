@@ -153,7 +153,7 @@ public class Astat {
             if (ifcondition.getValue() != 0) {
                 ifbody.execute();
             }
-
+            
         } else if (statementType == whileloop) {
             for (;;) {
 

@@ -11,12 +11,7 @@ public class Args {
     
     Args(Aexp x) {
         Fi = x;
-        Se = null;
-    }
-    
-    Args(boolean x) {
-        Fi = null;
-        Se = null;
+        Se = x;
     }
 
     public Aexp getfi() {
