@@ -2,44 +2,44 @@ package src;
 
 import java.util.Hashtable;
 
-public class SymbolTable extends Hashtable<String,Object>{
+public class SymbolTable extends Hashtable<String, MySymbol>{
 
     static SymbolTable globalTable;
-    static Hashtable<String, Integer> typeTable;
     
     static {
         globalTable = new SymbolTable();
-        typeTable = new Hashtable();
     }
 
-    static void setValue(String id, int value){
+    
+    static public void dump() {
+	    System.out.println(globalTable.toString());
+    }
+    
+    // Used to set the value of an existing variable.
+    static void setValue(String id, MySymbol value){
         globalTable.put(id,value);
     }
     
-    static void setValue(String id, float value){
+    // Used to create a new variable
+    static void declare(int type, String id, MySymbol value) {
+        // TODO: handle variables that are aleady defined.
         globalTable.put(id,value);
     }
     
-    static void declare(int type, String id, int value) {
-        globalTable.put(id,value);
-        typeTable.put(id, type);
-    }
-    
-    static void declare(int type, String id, float value) {
-        globalTable.put(id,value);
-        typeTable.put(id, type);
-    }
-    
-    static void declare(int type, String id, boolean value) {
-        globalTable.put(id,value);
-        typeTable.put(id, type);
-    }
-    
-    static Integer getType(String id) {
-        return typeTable.get(id);
+    // Get the type of the symbol
+    // i.e sym.INT/FLOAT/BOOLEAN
+    static int getType(String id) {
+        return globalTable.get(id).getType();
     }
 
+    // get the value of the Symbol.
+    // i.e. the actual integer/float/boolean values;
     static Object getValue(String id){
+        return  globalTable.get(id).getValue();
+    }
+
+    // get the Symbol object.
+    static MySymbol getSymbol(String id){
         return  globalTable.get(id);
     }
 }

@@ -9,32 +9,32 @@ public class Aexp {
         ID,
         EXP
     }
-    int type;
+    private int type;
     private final AexpType eType;
-    private Float inum;
+    private MySymbol inum;
     private String id;
     private Args operands;
     private int operator;
 
     Aexp(Integer x) {
         eType = AexpType.INTEGER;
-        this.type = sym.INTDEF;
-        inum = (float)x;        
+        this.type = sym.INT;
+        inum = new MySymbol(x, this.type);
     }
     Aexp(Float x) {
         eType = AexpType.FLOAT;
-        this.type = sym.FLOATDEF;
-        inum = x;        
+        this.type = sym.FLOAT;
+        inum = new MySymbol(x, this.type);        
     }
     Aexp(Boolean x) {
         eType = AexpType.BOOLEAN;
-        this.type = sym.BOOLEANDEF;
+        this.type = sym.BOOLEAN;
         operands = null;
-        inum = (x) ? 1.0f : 0.0f;        
+        inum = new MySymbol(x, this.type);        
     }
     Aexp(String x) {
         eType = AexpType.ID;
-        id = x;        
+        id = x;
     }
 
     Aexp(Args x, int op) {
@@ -43,42 +43,45 @@ public class Aexp {
         Aexp left = operands.getfi();
         Aexp right = operands.getse();
         if( left.getType() == sym.INT && right.getType() == sym.INT ) {
-            this.type = sym.INTDEF;
+            this.type = sym.INT;
         } else if(( left.getType() == sym.FLOAT && right.getType() == sym.INT )
                 ||( left.getType() == sym.INT && right.getType() == sym.FLOAT )
                 ||( left.getType() == sym.FLOAT && right.getType() == sym.FLOAT )) {
-            this.type = sym.FLOATDEF;
-        }
+            this.type = sym.FLOAT;
+        } else {
+		//TODO: Handle cases with id;
+		this.type = right.getType();
+	}
         switch(operator) {
             case sym.EQ:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
             case sym.NOTEQ:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
             case sym.GREATEREQ:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
             case sym.GREATER:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
             case sym.LESSEREQ:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
             case sym.LESSER:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
             case sym.NOT:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
             case sym.AND:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
             case sym.OR:
-                this.type = sym.BOOLEANDEF;
+                this.type = sym.BOOLEAN;
                 break;
         }
-        if(this.type == sym.BOOLEANDEF){
+        if(this.type == sym.BOOLEAN){
             eType = AexpType.BOOLEAN;
         } else{
             eType = AexpType.EXP;
@@ -114,7 +117,7 @@ public class Aexp {
                     case sym.OR:
                         break;
                     default:
-                        s = "" + inum;
+                        s = "" + inum.toString();
                         break;
                 } 
                 break;
@@ -140,23 +143,26 @@ public class Aexp {
         return s;
     }
 
-    public float getValue() {
-        Object val = 0;
+    public MySymbol getSymbol() {
+        MySymbol symbol = new MySymbol();
+	symbol.setType(this.type);
+	
         Aexp left;
         Aexp right;
         switch (this.eType) {
             case INTEGER:
                 // expression is a number
-                val = inum;
+                symbol.setValue(inum.getValue());
                 break;
             case FLOAT:
-                val = inum;
+                symbol.setValue(inum.getValue());
                 break;
             case ID:
                 //expression is a variable
                 try {
-                    val = SymbolTable.getValue(id);
-                    this.type = SymbolTable.getType(id);                    
+                    symbol = new MySymbol(SymbolTable.getSymbol(id));
+                    this.type = SymbolTable.getType(id);
+		    System.out.println(this.type);
                 } catch (NullPointerException e) {
                     System.out.print(id + " was not declared");
                     e.printStackTrace();
@@ -166,86 +172,90 @@ public class Aexp {
             case EXP:
                 left = operands.getfi();
                 right = operands.getse();
-                //expression is a math expression
-                switch (operator) {
+                // Expression is a math expression.
+                // TODO: do some type checking, maybe encapsulate operations inside the Symbol class.
+                // TODO: fix setting this.type for expressions.
+		switch (operator) {
                     case sym.PLUS:
-                        val = left.getValue() + right.getValue();
+                        symbol.setValue((Integer)left.getSymbol().getValue() + (Integer)right.getSymbol().getValue());
+			symbol.setType(right.getType());
                         break;
                     case sym.MINUS:
-                        val = left.getValue() - right.getValue();
-                        break;
-                    case sym.TIMES:
-                        val = left.getValue() * right.getValue();
-                        break;
-                    case sym.DIVIDE:
-                        val = left.getValue() / right.getValue();
+                        symbol.setValue((Integer)left.getSymbol().getValue() - (Integer)right.getSymbol().getValue());
+                        break;                                                           
+                    case sym.TIMES:                                                      
+                        symbol.setValue((Integer)left.getSymbol().getValue() * (Integer)right.getSymbol().getValue());
+                        break;                                                           
+                    case sym.DIVIDE:                                                     
+                        symbol.setValue((Integer)left.getSymbol().getValue() / (Integer)right.getSymbol().getValue());
                         break;
                     default:
                         break;
                 }
                 break;
             case BOOLEAN:
-                
                 boolean tempVal = false;
                 try{
                     left = operands.getfi();
                     right = operands.getse();
+		    //TODO: do typechecking for comarison operators.
                     switch(operator) {
                         // TODO: perform type check if following are integer/float/char.
                         case sym.EQ:
-                            tempVal = left.getValue() == right.getValue();
+                            tempVal = left.getSymbol().isEqual(right.getSymbol());
                             break;
                         case sym.NOTEQ:
-                            tempVal = left.getValue() != right.getValue();
+                            tempVal = !left.getSymbol().isEqual(right.getSymbol());
                             break;
                         case sym.GREATEREQ:
-                            tempVal = left.getValue() >= right.getValue();
+                            tempVal = (Integer)left.getSymbol().getValue() >= (Integer)right.getSymbol().getValue();
                             break;
                         case sym.GREATER:
-                            tempVal = left.getValue() > right.getValue();
+                            tempVal = (Integer)left.getSymbol().getValue() > (Integer)right.getSymbol().getValue();
                             break;
                         case sym.LESSEREQ:
-                            tempVal = left.getValue() <= right.getValue();
+                            tempVal = (Integer)left.getSymbol().getValue() <= (Integer)right.getSymbol().getValue();
                             break;
                         case sym.LESSER:
-                            tempVal = left.getValue() < right.getValue();
+                            tempVal = (Integer)left.getSymbol().getValue() < (Integer)right.getSymbol().getValue();
                             break;
                         // TODO: prform type check if the following are boolean or not.
                         case sym.NOT:
-                            tempVal = left.getValue() == 1.0; // check if true or not;
+                            tempVal = left.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN)); // check if true or not;
                             break;
                         case sym.OR:
-                            if(left.getValue() == 1.0 || right.getValue() == 1.0){
+                            if(left.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN)) 
+				|| right.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))){
                                 tempVal = true;
                             }
                             break;
                         case sym.AND:
-                            if(left.getValue() == 1 && right.getValue() == 1){
+                            if(left.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN)) 
+				&& right.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))){
                                 tempVal = true;
-                            } else if(left.getValue() == 0 && right.getValue() == 0){
+                            } else if(left.getSymbol().isEqual(new MySymbol(false, sym.BOOLEAN)) 
+				&& right.getSymbol().isEqual(new MySymbol(false, sym.BOOLEAN))){
                                 tempVal = true;
                             }
                             break;
                         default:
-                            tempVal = (inum == 1.0) ? true: false;
+                            tempVal = (boolean)inum.getValue();
                             break;
                     }
                 } catch(NullPointerException e) {
-                    tempVal = (this.inum == 1.0f) ? true : false;
+                    tempVal = (boolean)inum.getValue();
                 }
 
                 if(tempVal == true) {
-                    val = 1.0f;
+                    symbol.setValue(true);
                 } else {
-                    val = 0.0f;
+                    symbol.setValue(false);
                 }
             default: 
                 break;
         }
         
-        if(this.operator == sym.EQ)
-            System.out.println("FUUCCCKKKKKK: "+(float)val);
-        return (float) val;
+        return symbol;
     }
     
     public boolean isId() {
@@ -257,10 +267,10 @@ public class Aexp {
         }
     }
     
+    // TODO: Refactor this if we have enough time.
+    // --ONLY USE THIS FUNCTION INSIDE THIS CLASS--
+    // everywhere else, use Aexp.getSymbol().getType(). My code is fucked up.
     public int getType() {
-//       if(isId()) {
-//           return SymbolTable.getType(this.id);
-//       }
        return this.type;
     }
 }

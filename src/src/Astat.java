@@ -2,8 +2,6 @@ package src;
 
 public class Astat {
 
-
-
     int statementType;
     public static int assignment = 0;
     public static int varDeclaration = 1;
@@ -15,7 +13,6 @@ public class Astat {
     public static int returnStatement = 7;
     /*
      * decleration statement: type variable = expr
-     *
      */
     String decVariable;
     Aexp decExpr;
@@ -26,14 +23,27 @@ public class Astat {
 
         statement.decVariable = Variable;
         statement.decExpr = expr;
-        statement.decType = type;
+	switch(type) {
+		case sym.INTDEF:
+			statement.decType = sym.INT;
+			break;
+		case sym.FLOATDEF:
+			statement.decType = sym.FLOAT;
+			break;
+		case sym.BOOLEANDEF:
+			statement.decType = sym.BOOLEAN;
+			break;
+		default:
+			// TODO: do something useful, dumbass.
+			statement.decType = type;
+			break;
+	}
 
         return statement;
     }
 
     /*
      * assignment statement: variable = expr
-     *
      */    
     String assVariable;
     Aexp assExpr;
@@ -110,6 +120,11 @@ public class Astat {
             case sym.INTDEF: return "int";
             case sym.FLOATDEF: return "float";
             case sym.BOOLEANDEF: return "boolean";
+	    
+	    // Do something different here
+            case sym.INT: return "int";
+            case sym.FLOAT: return "float";
+            case sym.BOOLEAN: return "boolean";
         }
         
         return "wut?";
@@ -135,29 +150,30 @@ public class Astat {
     public void execute() {
 
         if (statementType == assignment) {
-            SymbolTable.setValue(assVariable, assExpr.getValue());
+            SymbolTable.setValue(assVariable, assExpr.getSymbol());
             System.out.println(this.getstat());
         } else if (statementType == varDeclaration) {
-            // if it's a variable, check the data type.
-            if(decExpr.getType() == this.decType){
+	    
+            if(this.decType == decExpr.getSymbol().getType()){
                 //continue;
             } else {
                 System.out.println("TYPE MISS MATCH:");
-//                    System.out.println(this.getstat());
+		System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
             }
-            System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getType());
+//            System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getType());
             
-            SymbolTable.declare(decType, decVariable, decExpr.getValue());
+            SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
+	    SymbolTable.dump();
         }else if (statementType == ifthen) {
 
-            if ((int)ifcondition.getValue() == 1) {
+            if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
                 ifbody.execute();
             }
             
         } else if (statementType == whileloop) {
             for (;;) {
 
-                if ((int)whileCondition.getValue() == 1) {
+                if (whileCondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
                     whileBody.execute();
                 } else {
                     break;
@@ -167,7 +183,7 @@ public class Astat {
 
         } else if (statementType == print) {
 
-            System.out.println(printE.getValue());
+            System.out.println(printE.getSymbol());
 
         } else if (statementType == block) {
             for (Astat s : blockBody.statementList) {
