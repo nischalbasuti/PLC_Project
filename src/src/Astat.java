@@ -100,7 +100,6 @@ public class Astat {
         statement.statementType = print;
         statement.printE = expr;
         return statement;
-
     }
 
     /*
@@ -148,22 +147,21 @@ public class Astat {
     }
 
     public void execute() {
-
+        System.out.println(">> "+this.getstat());
         if (statementType == assignment) {
             SymbolTable.setValue(assVariable, assExpr.getSymbol());
-            System.out.println(this.getstat());
         } else if (statementType == varDeclaration) {
 	    
             if(this.decType == decExpr.getSymbol().getType()){
                 //continue;
             } else {
-                System.out.println("TYPE MISS MATCH:");
-		System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
+                System.err.println("TYPE MISS MATCH:");
+                System.err.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
             }
 //            System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getType());
             
             SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
-	    SymbolTable.dump();
+//            SymbolTable.dump();
         }else if (statementType == ifthen) {
 
             if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {

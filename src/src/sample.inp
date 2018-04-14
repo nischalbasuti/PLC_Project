@@ -17,3 +17,4 @@ end;
  
 print b;
 print a;
+print c;

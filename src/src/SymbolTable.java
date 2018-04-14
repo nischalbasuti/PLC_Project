@@ -12,16 +12,25 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
 
     
     static public void dump() {
-	    System.out.println(globalTable.toString());
+        System.err.println("***SymbolTable Dump***");
+	    System.err.println(globalTable.toString());
     }
     
     // Used to set the value of an existing variable.
     static void setValue(String id, MySymbol value){
+        if(globalTable.get(id).getType() != value.getType()) {
+            System.err.println("Type Error in SymbolTable.setValue()");
+            SymbolTable.dump();
+        }
         globalTable.put(id,value);
     }
     
     // Used to create a new variable
     static void declare(int type, String id, MySymbol value) {
+        if(type != value.getType()) {
+            System.err.println("Type Error in SymbolTable.declare()");
+            SymbolTable.dump();
+        }
         // TODO: handle variables that are aleady defined.
         globalTable.put(id,value);
     }

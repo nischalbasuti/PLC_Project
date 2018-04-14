@@ -49,7 +49,7 @@ public class Aexp {
                 ||( left.getType() == sym.FLOAT && right.getType() == sym.FLOAT )) {
             this.type = sym.FLOAT;
         } else {
-		//TODO: Handle cases with id;
+		// TODO: Handle cases with id....need to assign type in getVariable();
 		this.type = right.getType();
 	}
         switch(operator) {
@@ -162,9 +162,8 @@ public class Aexp {
                 try {
                     symbol = new MySymbol(SymbolTable.getSymbol(id));
                     this.type = SymbolTable.getType(id);
-		    System.out.println(this.type);
                 } catch (NullPointerException e) {
-                    System.out.print(id + " was not declared");
+                    System.err.println(id + " was not declared.");
                     e.printStackTrace();
                     System.exit(0);
                 }
@@ -175,19 +174,18 @@ public class Aexp {
                 // Expression is a math expression.
                 // TODO: do some type checking, maybe encapsulate operations inside the Symbol class.
                 // TODO: fix setting this.type for expressions.
-		switch (operator) {
+                switch (operator) {
                     case sym.PLUS:
-                        symbol.setValue((Integer)left.getSymbol().getValue() + (Integer)right.getSymbol().getValue());
-			symbol.setType(right.getType());
+                        symbol = left.getSymbol().add(right.getSymbol());
                         break;
                     case sym.MINUS:
-                        symbol.setValue((Integer)left.getSymbol().getValue() - (Integer)right.getSymbol().getValue());
+                        symbol = left.getSymbol().subtract(right.getSymbol());
                         break;                                                           
                     case sym.TIMES:                                                      
-                        symbol.setValue((Integer)left.getSymbol().getValue() * (Integer)right.getSymbol().getValue());
+                        symbol = left.getSymbol().multiply(right.getSymbol());
                         break;                                                           
                     case sym.DIVIDE:                                                     
-                        symbol.setValue((Integer)left.getSymbol().getValue() / (Integer)right.getSymbol().getValue());
+                        symbol = left.getSymbol().divide(right.getSymbol());
                         break;
                     default:
                         break;
@@ -198,7 +196,7 @@ public class Aexp {
                 try{
                     left = operands.getfi();
                     right = operands.getse();
-		    //TODO: do typechecking for comarison operators.
+                    //TODO: do typechecking for comarison operators.
                     switch(operator) {
                         // TODO: perform type check if following are integer/float/char.
                         case sym.EQ:
@@ -225,16 +223,16 @@ public class Aexp {
                             break;
                         case sym.OR:
                             if(left.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN)) 
-				|| right.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))){
+                            || right.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))){
                                 tempVal = true;
                             }
                             break;
                         case sym.AND:
                             if(left.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN)) 
-				&& right.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))){
+                            && right.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))){
                                 tempVal = true;
                             } else if(left.getSymbol().isEqual(new MySymbol(false, sym.BOOLEAN)) 
-				&& right.getSymbol().isEqual(new MySymbol(false, sym.BOOLEAN))){
+                              && right.getSymbol().isEqual(new MySymbol(false, sym.BOOLEAN))){
                                 tempVal = true;
                             }
                             break;
