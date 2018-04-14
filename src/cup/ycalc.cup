@@ -19,7 +19,12 @@ non terminal Aexp               boolExp, boolFactor, boolTerm, relation, notFact
 non terminal Integer            type;
 
 program         ::= statement_list:s
-                    {: s.execute(); :};
+                    {: 
+                        System.out.println("***Start of Program***");
+                        s.execute(); 
+                        System.out.println("***End of Program***");
+                        SymbolTable.dump();
+                    :};
 
 
 statement_list  ::= statement_list:l statement_part:s

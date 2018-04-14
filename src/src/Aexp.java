@@ -206,16 +206,16 @@ public class Aexp {
                             tempVal = !left.getSymbol().isEqual(right.getSymbol());
                             break;
                         case sym.GREATEREQ:
-                            tempVal = (Integer)left.getSymbol().getValue() >= (Integer)right.getSymbol().getValue();
+                            tempVal = left.getSymbol().isGreaterAndEqual(right.getSymbol());
                             break;
                         case sym.GREATER:
-                            tempVal = (Integer)left.getSymbol().getValue() > (Integer)right.getSymbol().getValue();
+                            tempVal = left.getSymbol().isGreater(right.getSymbol());
                             break;
                         case sym.LESSEREQ:
-                            tempVal = (Integer)left.getSymbol().getValue() <= (Integer)right.getSymbol().getValue();
+                            tempVal = left.getSymbol().isLessAndEqual(right.getSymbol());
                             break;
                         case sym.LESSER:
-                            tempVal = (Integer)left.getSymbol().getValue() < (Integer)right.getSymbol().getValue();
+                            tempVal = left.getSymbol().isLess(right.getSymbol());
                             break;
                         // TODO: prform type check if the following are boolean or not.
                         case sym.NOT:

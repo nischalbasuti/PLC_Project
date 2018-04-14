@@ -39,33 +39,8 @@ public class MySymbol {
     public int getType() {
         return this.type;
     }
-
-    // Check if equal to another Symbol object.
-    // They are equal if they have the same value and type attributes.
-    public boolean isEqual(MySymbol otherSymbol) {
-        if( this.type ==  otherSymbol.getType() ) {
-            switch(otherSymbol.getType()) {
-                case sym.INT:
-                    return (int)this.value == (int)otherSymbol.getValue();
-                case sym.FLOAT:
-                    return (float)this.value == (float)otherSymbol.getValue();
-                case sym.BOOLEAN:
-                    return (boolean)this.value == (boolean)otherSymbol.getValue();
-            // case sym.CHAR:
-            //     if((int)this.value == (int)otherSymbol.getValue()) {
-            //         return true;
-            //     } else {
-            //         return false;
-            //     }
-            }
-        } else {
-            //TODO: handle properly
-            System.out.println("type error: can't compare.");
-        }
-        return false;
-    }
     
-    //##########ARTHEMETIC OPERATIONS##########################################
+    //ARTHEMETIC OPERATIONS ////////////////////////////////////////////////////
     public MySymbol add(MySymbol b) {
         MySymbol retSymbol = new MySymbol();
         retSymbol.setType( getCompatableType(this, b) );
@@ -73,7 +48,7 @@ public class MySymbol {
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() + (int)b.getValue() );
         } else if(retSymbol.getType() == sym.FLOAT) {
-            retSymbol.setValue( (float)this.getValue() + (float)b.getValue());
+            retSymbol.setValue( Float.valueOf(this.getValue().toString()) + Float.valueOf(b.getValue().toString()) );
         }
         
         return retSymbol;
@@ -85,7 +60,7 @@ public class MySymbol {
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() - (int)b.getValue() );
         } else if(retSymbol.getType() == sym.FLOAT) {
-            retSymbol.setValue( (float)this.getValue() - (float)b.getValue());
+            retSymbol.setValue( Float.valueOf(this.getValue().toString()) - Float.valueOf(b.getValue().toString()) );
         }
         
         return retSymbol;
@@ -97,7 +72,7 @@ public class MySymbol {
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() / (int)b.getValue() );
         } else if(retSymbol.getType() == sym.FLOAT) {
-            retSymbol.setValue( (float)this.getValue() / (float)b.getValue());
+            retSymbol.setValue( Float.valueOf(this.getValue().toString()) / Float.valueOf(b.getValue().toString()) );
         }
         
         return retSymbol;
@@ -109,12 +84,64 @@ public class MySymbol {
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() * (int)b.getValue() );
         } else if(retSymbol.getType() == sym.FLOAT) {
-            retSymbol.setValue( (float)this.getValue() * (float)b.getValue());
+            retSymbol.setValue( Float.valueOf(this.getValue().toString()) * Float.valueOf(b.getValue().toString()) );
         }
         
         return retSymbol;
     }
-    //#########################################################################
+    ////////////////////////////////////////////////////////////////////////////
+    
+    //Comparison Operations ////////////////////////////////////////////////////
+    
+    // Check if equal to another Symbol object.
+    // They are equal if they have the same value and type attributes.
+    public boolean isEqual(MySymbol otherSymbol) {
+        if( this.type ==  otherSymbol.getType() ) {
+            switch(otherSymbol.getType()) {
+                case sym.INT:
+                    return (int)this.value == (int)otherSymbol.getValue();
+                case sym.FLOAT:
+                    return (float)this.value == (float)otherSymbol.getValue();
+                case sym.BOOLEAN:
+                    return (boolean)this.value == (boolean)otherSymbol.getValue();
+            }
+        } else {
+            //TODO: handle properly
+            System.out.println("type error: can't compare.");
+        }
+        return false;
+    }
+    
+    public boolean isGreater(MySymbol otherMySymbol) {
+        boolean ret = false;
+        if(getCompatableType(this, otherMySymbol) != -1) {
+            ret =  Float.valueOf(this.getValue().toString()) > Float.valueOf((otherMySymbol.getValue().toString()));
+        }
+        return ret;
+    }
+    public boolean isGreaterAndEqual(MySymbol otherMySymbol) {
+        boolean ret = false;
+        if(getCompatableType(this, otherMySymbol) != -1) {
+            ret =  Float.valueOf(this.getValue().toString()) >= Float.valueOf((otherMySymbol.getValue().toString()));
+        }
+        return ret;
+    }
+    public boolean isLess(MySymbol otherMySymbol) {
+        boolean ret = false;
+        if(getCompatableType(this, otherMySymbol) != -1) {
+            ret =  Float.valueOf(this.getValue().toString()) < Float.valueOf((otherMySymbol.getValue().toString()));
+        }
+        return ret;
+    }
+    public boolean isLessAndEqual(MySymbol otherMySymbol) {
+        boolean ret = false;
+        if(getCompatableType(this, otherMySymbol) != -1) {
+            ret =  Float.valueOf(this.getValue().toString()) <= Float.valueOf((otherMySymbol.getValue().toString()));
+        }
+        return ret;
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
     
     // This method checks it two Symbol objects are of a compatable datatype.
     // if they are compatable, then it returns the data type of which a resulting
