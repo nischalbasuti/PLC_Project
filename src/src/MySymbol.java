@@ -20,16 +20,16 @@ public class MySymbol {
     }
     
     public MySymbol(MySymbol symbol){
-	this.value = symbol.getValue();
-	this.type = symbol.getType();
+        this.value = symbol.getValue();
+        this.type = symbol.getType();
     }
     
     public void setValue(Object value) {
-	this.value = value;
+        this.value = value;
     }
     
     public void setType(int type) {
-	this.type = type;
+        this.type = type;
     }
     
     public Object getValue() {
@@ -45,12 +45,18 @@ public class MySymbol {
         MySymbol retSymbol = new MySymbol();
         retSymbol.setType( getCompatableType(this, b) );
         
-        if(retSymbol.getType() == sym.INT) {
-            retSymbol.setValue( (int)this.getValue() + (int)b.getValue() );
-        } else if(retSymbol.getType() == sym.FLOAT) {
-            retSymbol.setValue( Float.valueOf(this.getValue().toString()) + Float.valueOf(b.getValue().toString()) );
-        } else if(retSymbol.getType() == sym.CHAR) {
-            retSymbol.setValue(this.getValue().toString() + b.getValue().toString() );
+        switch (retSymbol.getType()) {
+            case sym.INT:
+                retSymbol.setValue( (int)this.getValue() + (int)b.getValue() );
+                break;
+            case sym.FLOAT:
+                retSymbol.setValue( Float.valueOf(this.getValue().toString()) + Float.valueOf(b.getValue().toString()) );
+                break;
+            case sym.CHAR:
+                retSymbol.setValue(this.getValue().toString() + b.getValue().toString() );
+                break;
+            default:
+                break;
         }
         
         return retSymbol;
@@ -185,17 +191,18 @@ public class MySymbol {
     
     @Override
     public String toString() {
-        switch(this.type) {
-            case sym.INT:
-                return "[value: " + ((Integer)this.value).toString() + ", type: " + this.type+ "]";
-            case sym.FLOAT:
-                return "[value: " + ((Float)this.value).toString() + ", type: " + this.type +  "]";
-            case sym.BOOLEAN:
-                return "[value: " + ((Boolean)this.value).toString() + ", type: " + this.type +"]";
-            case sym.CHAR:
-                return "[value: " + (this.value).toString() + ", type: " + this.type +"]";
-            default:
-                return "[value: " + this.value.toString() + ", (fucked up)type: " + this.type +"]";
-        }
+        return "[value: " + this.value.toString() + ", type: " + SymConverter.getTypeString(this.type) +"]";
+//        switch(this.type) {
+//            case sym.INT:
+//                return "[value: " + ((Integer)this.value).toString() + ", type: " + this.type+ "]";
+//            case sym.FLOAT:
+//                return "[value: " + ((Float)this.value).toString() + ", type: " + this.type +  "]";
+//            case sym.BOOLEAN:
+//                return "[value: " + ((Boolean)this.value).toString() + ", type: " + this.type +"]";
+//            case sym.CHAR:
+//                return "[value: " + (this.value).toString() + ", type: " + this.type +"]";
+//            default:
+//                return "[value: " + this.value.toString() + ", (fucked up)type: " + this.type +"]";
+//        }
     }
 }

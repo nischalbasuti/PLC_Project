@@ -70,7 +70,7 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
    or just a zero.  */
 int = 0 | [1-9][0-9]*
 float = [1-9][0-9]*\.[0-9]+
-char = \'[a-zA-Z0-9 _.-]*\'|\"[a-zA-Z0-9 _.-]*\"
+char = \'[a-zA-Z0-9 :;\"_,.-]*\'|\"[a-zA-Z0-9 :;\'_,.-]*\"
 
 /* A identifier integer is a word beginning a letter between A and
    Z, a and z, or an underscore followed by zero or more letters
@@ -124,7 +124,7 @@ id = [A-Za-z_][A-Za-z_0-9]*
     "begin"            { return symbol(sym.BEGIN); }
     "end"              { return symbol(sym.END); }
     
-    /*variable decleration stuff*/
+    /*variable declaration stuff*/
     "int"              { return symbol(sym.INTDEF, sym.INTDEF); }
     "float"            { return symbol(sym.FLOATDEF, sym.FLOATDEF); }
     "boolean"          { return symbol(sym.BOOLEANDEF, sym.BOOLEANDEF); }
@@ -136,7 +136,11 @@ id = [A-Za-z_][A-Za-z_0-9]*
 
     {int}      { return symbol(sym.INT, new Integer(yytext())); }
     {float}    { return symbol(sym.FLOAT, new Float(yytext())); }
-    {char}     { return symbol(sym.CHAR, new String(yytext())); }
+    {char}     { 
+                    // Remove quotes from the string.
+                    String str = yytext();
+                    return symbol(sym.CHAR, new String(str.substring(1, str.length()-1))); 
+                }
 
     {id}       { return symbol(sym.ID, yytext());}
 
