@@ -1,18 +1,22 @@
-boolean run = true;
+######################################
+# Program to print fibonacci series. #
+######################################
 
 int prev = 0;
 int curr = 1;
 int temp = 1;
+int count = 0; # count number of iterations. #
+char str = ""; # String to hold fibonacci series. #
 
-char str = "";
-
+boolean run = true; # Set this to false to stop while loop. #
 while run do
 begin
+    count = count + 1;
     str = str + ", " + prev;
     temp = curr;
     curr = prev + curr;
     prev = temp;
-    if curr > 20 then
+    if count >= 20 then
     begin
         run = false;
     end;

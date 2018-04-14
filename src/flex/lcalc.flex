@@ -77,6 +77,8 @@ char = \'[a-zA-Z0-9 :;\"_,.-]*\'|\"[a-zA-Z0-9 :;\'_,.-]*\"
    between A and Z, a and z, zero and nine, or an underscore. */
 id = [A-Za-z_][A-Za-z_0-9]*
 
+comment = #.*#
+
 %%
 /* ------------------------Lexical Rules Section---------------------- */
 
@@ -146,6 +148,7 @@ id = [A-Za-z_][A-Za-z_0-9]*
 
     /* Don't do anything if whitespace is found */
     {WhiteSpace}       { /* just skip what was found, do nothing */ }
+    {comment}          {/* do nothing */}
 }
 
 
