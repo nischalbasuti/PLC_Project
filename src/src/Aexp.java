@@ -231,24 +231,17 @@ public class Aexp {
                             break;
                         // TODO: prform type check if the following are boolean or not.
                         case sym.NOT:
-                            tempVal = left.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN)); // check if true or not;
+                            tempVal = left.getSymbol().not(); // check if true or not;
                             break;
                         case sym.OR:
-                            if(left.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN)) 
-                            || right.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))){
-                                tempVal = true;
-                            }
+                            tempVal = left.getSymbol().or(right.getSymbol());
                             break;
                         case sym.AND:
-                            if(left.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN)) 
-                            && right.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))){
-                                tempVal = true;
-                            } else if(left.getSymbol().isEqual(new MySymbol(false, sym.BOOLEAN)) 
-                              && right.getSymbol().isEqual(new MySymbol(false, sym.BOOLEAN))){
-                                tempVal = true;
-                            }
+                            tempVal = left.getSymbol().and(right.getSymbol());
                             break;
                         default:
+                            // TODO: This shouldn't happen I think, not sure.
+                            // Check when not sleep deprived.
                             tempVal = (boolean)inum.getValue();
                             break;
                     }

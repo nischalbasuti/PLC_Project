@@ -7,6 +7,7 @@ public class Astat {
     public static int varDeclaration = 1;
     public static int print = 2;
     public static int ifthen = 3;
+    public static int ifthenelse = 8;
     public static int block = 4;
     public static int whileloop = 5;
     public static int funDeclaration = 6;
@@ -90,6 +91,21 @@ public class Astat {
 
         return statement;
     }
+    
+    /*
+     * if then else statement: if ifcondition then ifbody else elsebody
+     *
+     */
+    Astat elsebody;
+    public static Astat ifthenelse(Aexp Condition, Astat ifbody, Astat elsebody) {
+        Astat statement = new Astat();
+        statement.statementType = ifthenelse;
+        statement.ifcondition = Condition;
+        statement.ifbody = ifbody;
+        statement.elsebody = elsebody;
+
+        return statement;
+    }
 
     /*
      * print statement: print e
@@ -138,6 +154,8 @@ public class Astat {
             return typeToString(this.decType) + " " + decVariable + " = "+decExpr.getexp();
         }else if (statementType == ifthen) {
             return "if " + ifcondition.getexp() + " " + ifbody.getstat();
+        }else if(statementType == ifthenelse){
+            return "if then else TODO"; //TODO
         } else if (statementType == print) {
             return "print " + printE.getexp();
         } else if (statementType == whileloop) {
@@ -150,7 +168,7 @@ public class Astat {
     }
 
     public void execute() {
-        System.out.println(">> "+this.getstat());
+//        System.out.println(">> "+this.getstat());
         if (statementType == assignment) {
             SymbolTable.setValue(assVariable, assExpr.getSymbol());
         } else if (statementType == varDeclaration) {
@@ -165,21 +183,25 @@ public class Astat {
             
             SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
 //            SymbolTable.dump();
-        }else if (statementType == ifthen) {
+        } else if (statementType == ifthen) {
 
             if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
                 ifbody.execute();
             }
             
+        } else if (statementType == ifthenelse) {
+           if(ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
+               ifbody.execute();
+           } else {
+               elsebody.execute();
+           }
         } else if (statementType == whileloop) {
             for (;;) {
-
                 if (whileCondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
                     whileBody.execute();
                 } else {
                     break;
                 }
-
             }
 
         } else if (statementType == print) {

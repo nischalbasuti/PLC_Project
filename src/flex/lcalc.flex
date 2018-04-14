@@ -120,6 +120,7 @@ comment = #.*#
 
     "if"               { return symbol(sym.IF); }
     "then"             { return symbol(sym.THEN); }
+    "else"             { return symbol(sym.ELSE); }
     "print"            { return symbol(sym.PRINT); }
     "while"            { return symbol(sym.WHILE); }
     "do"               { return symbol(sym.DO); }

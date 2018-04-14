@@ -5,7 +5,7 @@
 int prev = 0;
 int curr = 1;
 int temp = 1;
-int count = 0; # count number of iterations. #
+int count = 0; # Count number of iterations. #
 char str = ""; # String to hold fibonacci series. #
 
 boolean run = true; # Set this to false to stop while loop. #
@@ -16,9 +16,19 @@ begin
     temp = curr;
     curr = prev + curr;
     prev = temp;
+
     if count >= 20 then
     begin
         run = false;
+    end
+    else
+    begin
+        print "still running";
+    end;
+
+    if not run then
+    begin
+        print "this won't be running anymore "+run;
     end;
 end;
 

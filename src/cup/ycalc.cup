@@ -1,9 +1,9 @@
 package src;
 import java_cup.runtime.*;
 
-
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN,
-                   ASS, IF, THEN, PRINT, WHILE,  DO, BEGIN,  END;
+terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN, ASS;
+terminal           IF, THEN, ELSE, WHILE,  DO, BEGIN,  END;
+terminal           PRINT;
 terminal           EQ, NOTEQ, LESSER, LESSEREQ, GREATER, GREATEREQ, AND, OR, NOT;
 terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF, CHARDEF;
 terminal Integer   INT;
@@ -49,22 +49,22 @@ statement       ::= assignment:s
                 | while:s
                     {: RESULT = s; :}
                 | BEGIN statement_list:s END
-                    {: RESULT = Astat.block(s); :}
-                ;
+                    {: RESULT = Astat.block(s); :};
 
 while           ::= WHILE boolExp:e DO statement:s
                     {: RESULT = Astat.whileloop(e,s); :};
 
 print           ::= PRINT boolExp:e
-                    {: RESULT = Astat.print(e); :}
-                ;
+                    {: RESULT = Astat.print(e); :};
 
 ifthen          ::= IF boolExp:e THEN statement:s
-                    {: RESULT = Astat.ifthen(e,s); :}
-                ;
+                    {: RESULT = Astat.ifthen(e, s); :}
+                |   IF boolExp:e THEN statement:s_if ELSE statement:s_else
+                    {: RESULT = Astat.ifthenelse(e, s_if, s_else); :};
 
 vardec          ::= type:t ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(t,i,e); :};
+
 type            ::= INTDEF:i
                     {: RESULT = i; :}
                 |  FLOATDEF:f

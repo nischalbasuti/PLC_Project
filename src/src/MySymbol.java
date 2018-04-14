@@ -151,6 +151,18 @@ public class MySymbol {
     
     ////////////////////////////////////////////////////////////////////////////
     
+    // Boolean operations //////////////////////////////////////////////////////
+    public boolean not() {
+        return !((boolean) this.getValue());
+    }
+    public boolean and(MySymbol otherSymbol) {
+        return ((boolean)this.getValue()) && ((boolean)otherSymbol.getValue());
+    }
+    public boolean or(MySymbol otherSymbol) {
+        return ((boolean)this.getValue()) || ((boolean)otherSymbol.getValue());
+    }
+    ////////////////////////////////////////////////////////////////////////////
+    
     // This method checks it two Symbol objects are of a compatable datatype.
     // if they are compatable, then it returns the data type of which a resulting
     // Symbol object should be if an operation is performed on the two objects.
