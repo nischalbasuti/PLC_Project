@@ -12,26 +12,37 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
 
     
     static public void dump() {
-        System.err.println("***SymbolTable Dump***");
-	    System.err.println(globalTable.toString());
+        System.out.println("***SymbolTable Dump***");
+	    System.out.println(globalTable.toString());
     }
     
     // Used to set the value of an existing variable.
     static void setValue(String id, MySymbol value){
         if(globalTable.get(id).getType() != value.getType()) {
-            System.err.println("Type Error in SymbolTable.setValue()");
+            System.out.println("Type Error in SymbolTable.setValue()");
             SymbolTable.dump();
         }
+        // if a character type, remove the quotes
+//        if(value.getType() == sym.CHAR) {
+//            String str = value.getValue().toString();
+//            value.setValue(str.substring(1, str.length()-1));
+//        }
         globalTable.put(id,value);
     }
     
     // Used to create a new variable
     static void declare(int type, String id, MySymbol value) {
         if(type != value.getType()) {
-            System.err.println("Type Error in SymbolTable.declare()");
+            System.out.println("Type Error in SymbolTable.declare()");
             SymbolTable.dump();
         }
         // TODO: handle variables that are aleady defined.
+        
+        // if a character type, remove the quotes
+//        if(value.getType() == sym.CHAR) {
+//            String str = value.getValue().toString();
+//            value.setValue(str.substring(1, str.length()-1));
+//        }
         globalTable.put(id,value);
     }
     

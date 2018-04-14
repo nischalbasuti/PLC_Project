@@ -33,6 +33,8 @@ public class Astat {
 		case sym.BOOLEANDEF:
 			statement.decType = sym.BOOLEAN;
 			break;
+        case sym.CHARDEF:
+            statement.decType = sym.CHAR;
 		default:
 			// TODO: do something useful, dumbass.
 			statement.decType = type;
@@ -124,6 +126,7 @@ public class Astat {
             case sym.INT: return "int";
             case sym.FLOAT: return "float";
             case sym.BOOLEAN: return "boolean";
+            case sym.CHAR: return "char";
         }
         
         return "wut?";
@@ -155,8 +158,8 @@ public class Astat {
             if(this.decType == decExpr.getSymbol().getType()){
                 //continue;
             } else {
-                System.err.println("TYPE MISS MATCH:");
-                System.err.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
+                System.out.println("TYPE MISS MATCH:");
+                System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
             }
 //            System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getType());
             

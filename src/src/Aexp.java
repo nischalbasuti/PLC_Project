@@ -6,6 +6,7 @@ public class Aexp {
         INTEGER,
         FLOAT,
         BOOLEAN,
+        CHAR,
         ID,
         EXP
     }
@@ -32,9 +33,16 @@ public class Aexp {
         operands = null;
         inum = new MySymbol(x, this.type);        
     }
-    Aexp(String x) {
-        eType = AexpType.ID;
-        id = x;
+    Aexp(String x, boolean isid) {
+        if (isid) {
+            eType = AexpType.ID;
+            id = x;
+        } else {
+            eType = AexpType.CHAR;
+            this.type = sym.CHAR;
+            operands = null;
+            inum = new MySymbol(x, this.type);
+        }
     }
 
     Aexp(Args x, int op) {
@@ -121,6 +129,7 @@ public class Aexp {
                         break;
                 } 
                 break;
+            case CHAR: s = "" + inum; break;
             case ID: s = id; break;
             case EXP:
                 switch (operator) {
@@ -145,7 +154,7 @@ public class Aexp {
 
     public MySymbol getSymbol() {
         MySymbol symbol = new MySymbol();
-	symbol.setType(this.type);
+	    symbol.setType(this.type);
 	
         Aexp left;
         Aexp right;
@@ -155,6 +164,9 @@ public class Aexp {
                 symbol.setValue(inum.getValue());
                 break;
             case FLOAT:
+                symbol.setValue(inum.getValue());
+                break;
+            case CHAR:
                 symbol.setValue(inum.getValue());
                 break;
             case ID:

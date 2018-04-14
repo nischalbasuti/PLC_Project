@@ -70,6 +70,7 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
    or just a zero.  */
 int = 0 | [1-9][0-9]*
 float = [1-9][0-9]*\.[0-9]+
+char = \'[a-zA-Z0-9 _.-]*\'|\"[a-zA-Z0-9 _.-]*\"
 
 /* A identifier integer is a word beginning a letter between A and
    Z, a and z, or an underscore followed by zero or more letters
@@ -95,6 +96,7 @@ id = [A-Za-z_][A-Za-z_0-9]*
 
     /* Print the token found that was declared in the class sym and then
        return it. */
+    /*arithmetic operations*/
     "+"                { return symbol(sym.PLUS); }
     "-"                { return symbol(sym.MINUS); }
     "*"                { return symbol(sym.TIMES); }
@@ -102,15 +104,18 @@ id = [A-Za-z_][A-Za-z_0-9]*
     "("                { return symbol(sym.LPAREN); }
     ")"                { return symbol(sym.RPAREN); }
     "="                { return symbol(sym.ASS); }
+    /*comparison operations*/
     "=="               { return symbol(sym.EQ); }
     "!="               { return symbol(sym.NOTEQ); }
     "<"                { return symbol(sym.LESSER); }
     "<="               { return symbol(sym.LESSEREQ); }
     ">"                { return symbol(sym.GREATER); }
     ">="               { return symbol(sym.GREATEREQ);}
+    /*boolean operations*/
     "and"              { return symbol(sym.AND); }
     "or"               { return symbol(sym.OR); }
     "not"              { return symbol(sym.NOT); }
+
     "if"               { return symbol(sym.IF); }
     "then"             { return symbol(sym.THEN); }
     "print"            { return symbol(sym.PRINT); }
@@ -118,14 +123,20 @@ id = [A-Za-z_][A-Za-z_0-9]*
     "do"               { return symbol(sym.DO); }
     "begin"            { return symbol(sym.BEGIN); }
     "end"              { return symbol(sym.END); }
+    
+    /*variable decleration stuff*/
     "int"              { return symbol(sym.INTDEF, sym.INTDEF); }
     "float"            { return symbol(sym.FLOATDEF, sym.FLOATDEF); }
     "boolean"          { return symbol(sym.BOOLEANDEF, sym.BOOLEANDEF); }
+    "char"             { return symbol(sym.CHARDEF, sym.CHARDEF); }
+    
+    /*other keywords*/
     "true"             { return symbol(sym.BOOLEAN, new Boolean(true)); }
     "false"            { return symbol(sym.BOOLEAN, new Boolean(false)); }
 
     {int}      { return symbol(sym.INT, new Integer(yytext())); }
     {float}    { return symbol(sym.FLOAT, new Float(yytext())); }
+    {char}     { return symbol(sym.CHAR, new String(yytext())); }
 
     {id}       { return symbol(sym.ID, yytext());}
 

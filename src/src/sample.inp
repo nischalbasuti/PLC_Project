@@ -4,17 +4,24 @@ float d = 5;
 int c = (1 + d);
 boolean itis = true;
 boolean itisnot = false and itis;
+char cc = "this_is_a_string";
+char cc1 = " this_is_another_string";
 
 while itis do
 begin
     b = b * a;
     a = a - 1;
-    if a <= 1 then
+    if a <= 0 then
     begin
         itis = false;
     end;
 end;
  
-print b;
+print "b "+b;
 print a;
 print c;
+
+
+char string_to_print = cc+cc1+' huh ';
+print cc+cc1+' huh ';
+print string_to_print;

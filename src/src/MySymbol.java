@@ -49,6 +49,8 @@ public class MySymbol {
             retSymbol.setValue( (int)this.getValue() + (int)b.getValue() );
         } else if(retSymbol.getType() == sym.FLOAT) {
             retSymbol.setValue( Float.valueOf(this.getValue().toString()) + Float.valueOf(b.getValue().toString()) );
+        } else if(retSymbol.getType() == sym.CHAR) {
+            retSymbol.setValue(this.getValue().toString() + b.getValue().toString() );
         }
         
         return retSymbol;
@@ -168,9 +170,14 @@ public class MySymbol {
                     retType = sym.BOOLEAN;
                 }
                 break;
+            case sym.CHAR:
+//                if(b.getType() == sym.CHAR){
+                    retType = sym.CHAR;
+//                }
+                break;
         }
         if(retType == -1) {
-            System.err.println("Type error getCompatableType(). Symbols: "+a+ ", "+b);
+            System.out.println("Type error getCompatableType(). Symbols: "+a+ ", "+b);
             System.exit(1);
         }
         return retType;
@@ -185,6 +192,8 @@ public class MySymbol {
                 return "[value: " + ((Float)this.value).toString() + ", type: " + this.type +  "]";
             case sym.BOOLEAN:
                 return "[value: " + ((Boolean)this.value).toString() + ", type: " + this.type +"]";
+            case sym.CHAR:
+                return "[value: " + (this.value).toString() + ", type: " + this.type +"]";
             default:
                 return "[value: " + this.value.toString() + ", (fucked up)type: " + this.type +"]";
         }

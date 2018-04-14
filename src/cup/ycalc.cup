@@ -5,10 +5,12 @@ import java_cup.runtime.*;
 terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN,
                    ASS, IF, THEN, PRINT, WHILE,  DO, BEGIN,  END;
 terminal           EQ, NOTEQ, LESSER, LESSEREQ, GREATER, GREATEREQ, AND, OR, NOT;
-terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF;
+//terminal           DOUBLEQUOTE, SINGLEQUOTE;
+terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF, CHARDEF;
 terminal Integer   INT;
 terminal Float     FLOAT;
 terminal Boolean   BOOLEAN;
+terminal String    CHAR;
 terminal String    ID;
 
 non terminal Object             program;
@@ -69,7 +71,9 @@ type            ::= INTDEF:i
                 |  FLOATDEF:f
                     {: RESULT = f; :}
                 |  BOOLEANDEF:b
-                    {: RESULT = b; :};
+                    {: RESULT = b; :}
+                |  CHARDEF:c
+                    {: RESULT = c; :};
 
 assignment      ::= ID:i ASS boolExp:e
                     {: RESULT = Astat.assignment(i,e); :};
@@ -136,5 +140,7 @@ factor          ::= LPAREN boolExp:e RPAREN
                     {: RESULT = new Aexp(i); :}
                 | FLOAT:f
                     {: RESULT = new Aexp(f); :}
+                | CHAR:c
+                    {: RESULT = new Aexp(c, false); :}
                 | ID:i
-                    {: RESULT = new Aexp(i); :};
+                    {: RESULT = new Aexp(i, true); :};
