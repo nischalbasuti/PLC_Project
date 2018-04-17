@@ -79,7 +79,6 @@ char = \'[a-zA-Z0-9 :;\"_,.-]*\'|\"[a-zA-Z0-9 :;\'_,.-]*\"
 id = [A-Za-z_][A-Za-z_0-9]*
 
 /*arg_list = ([A-Za-z_][A-Za-z_0-9]*,)+*/
-array = \[([A-Za-z_][A-Za-z_0-9]*,)+\]
 
 comment = #.*#
 
@@ -116,6 +115,7 @@ comment = #.*#
     "]"                { return symbol(sym.RBRACKET); }
     "<"                { return symbol(sym.LANGLE); }
     ">"                { return symbol(sym.RANGLE); }
+    ","                { return symbol(sym.COMMA); }
 
     /*comparison operations*/
     "=="               { return symbol(sym.EQ); }
@@ -159,17 +159,6 @@ comment = #.*#
                     // Remove quotes from the string.
                     String str = yytext();
                     return symbol(sym.CHAR, new String(str.substring(1, str.length()-1))); 
-                }
-    {array}     {
-                    String listStr = yytext();
-                    listStr = listStr.substring(1, listStr.length()-1);
-                    System.out.println("ARRAY "+ listStr);
-                    
-                    MyArray array = new MyArray();
-                    for(String item : listStr.split(",",0)) {
-                        array.append(item);
-                    }
-                    return symbol(sym.ARRAY, array);
                 }
     {id}       { return symbol(sym.ID, yytext());}
 

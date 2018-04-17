@@ -19,6 +19,19 @@ public class MyArray {
         this.type = type;
     }
     
+    public MyArray(ExpList expList, int type) {
+        this.type = type;
+        for(Aexp exp : expList.getExpressionList()){
+            this.arrayList.add(exp.getSymbol());
+        }
+    }
+    public MyArray(ExpList expList) {
+        this.type = type;
+        for(Aexp exp : expList.getExpressionList()){
+            this.arrayList.add(exp.getSymbol());
+        }
+    }
+    
     public MyArray() {
         this.type = -1;
     }

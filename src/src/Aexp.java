@@ -23,6 +23,12 @@ public class Aexp {
         this.type = sym.ARRAY;
         inum = new MySymbol(a, this.type);
     }
+    
+    public Aexp(ExpList expList, boolean isArray) {
+        this.eType = AexpType.ARRAY;
+        this.type = sym.ARRAY;
+        inum = new MySymbol(new MyArray(expList), this.type);
+    }
 
     Aexp(Integer x) {
         eType = AexpType.INTEGER;

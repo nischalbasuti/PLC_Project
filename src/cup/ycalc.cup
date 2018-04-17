@@ -12,9 +12,11 @@ terminal Integer   INT;
 terminal Float     FLOAT;
 terminal Boolean   BOOLEAN;
 terminal String    CHAR;
-terminal MyArray ARRAY;
 terminal String    ID;
+terminal           ARRAY;
 
+non terminal Aexp               array, expListPart;
+non terminal ExpList            expList;
 non terminal Object             program;
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
 non terminal Lstat              statement_list;
@@ -63,6 +65,14 @@ ifthen          ::= IF boolExp:e THEN statement:s
                     {: RESULT = Astat.ifthen(e, s); :}
                 |   IF boolExp:e THEN statement:s_if ELSE statement:s_else
                     {: RESULT = Astat.ifthenelse(e, s_if, s_else); :};
+
+expListPart     ::= boolExp:e 
+                    {: RESULT = e;:}
+                COMMA;
+expList         ::= expList:e_list expListPart:e
+                    {: RESULT =  new ExpList(e_list, e); :}
+                |   expListPart:e
+                    {: RESULT = new ExpList(e); :};
 
 vardec          ::= type:t ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(t, i, e); :}
@@ -145,7 +155,10 @@ factor          ::= LPAREN boolExp:e RPAREN
                     {: RESULT = new Aexp(f); :}
                 | CHAR:c
                     {: RESULT = new Aexp(c, false); :}
-                | ARRAY:a
-                    {: RESULT = new Aexp(a); :}
+                | array:a
+                    {: RESULT = a; :}
                 | ID:i
                     {: RESULT = new Aexp(i, true); :};
+
+array          ::= LBRACKET expList:e_list RBRACKET
+                   {: RESULT = new Aexp(e_list, true); :};

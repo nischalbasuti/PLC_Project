@@ -9,7 +9,7 @@ int curr = 1;
 int temp = 1;
 int count = 0; # Count number of iterations. #
 char str = ""; # String to hold fibonacci series. #
-array<char> a = [x,y,z,];
+array<char> a = [1,false,3.0,true,];
 
 boolean run = true; # Set this to false to stop while loop. #
 while run do
