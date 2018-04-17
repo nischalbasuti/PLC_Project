@@ -215,7 +215,8 @@ public class MySymbol {
     
     @Override
     public String toString() {
-        return "[value: " + this.value.toString() + ", type: " + SymConverter.getTypeString(this.type) +"]";
+        return this.value.toString();
+//        return "[value: " + this.value.toString() + ", type: " + SymConverter.getTypeString(this.type) +"]";
 //        switch(this.type) {
 //            case sym.INT:
 //                return "[value: " + ((Integer)this.value).toString() + ", type: " + this.type+ "]";

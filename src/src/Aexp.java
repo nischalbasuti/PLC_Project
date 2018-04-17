@@ -13,7 +13,7 @@ public class Aexp {
         EXP
     }
     private int type;
-    private final AexpType eType;
+    private AexpType eType;
     private MySymbol inum;
     private String id;
     private Args operands;

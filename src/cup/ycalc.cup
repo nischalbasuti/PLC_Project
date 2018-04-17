@@ -89,7 +89,9 @@ type            ::= INTDEF:i
                     {: RESULT = c; :};
 
 assignment      ::= ID:i ASS boolExp:e
-                    {: RESULT = Astat.assignment(i,e); :};
+                    {: RESULT = Astat.assignment(i, e); :}
+                |   ID:a LBRACKET INT:index RBRACKET ASS boolExp:e
+                    {: RESULT = Astat.assignment(a, index, e); :};
 
 boolExp         ::= boolExp:e OR boolTerm:t
                     {: RESULT = new Aexp(new Args(e, t), sym.OR); :}

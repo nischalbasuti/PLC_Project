@@ -12,6 +12,7 @@ public class Astat {
     public static int whileloop = 5;
     public static int funDeclaration = 6;
     public static int returnStatement = 7;
+    public static int arrayAssignment = 9;
     /*
      * decleration statement: type variable = expr
      */
@@ -118,6 +119,19 @@ public class Astat {
         return statement;
 
     }
+    
+    int assIndex;
+    public static Astat assignment(String arrayName, int arrayIndex, Aexp expr) {
+        Astat statement = new Astat();
+        statement.statementType = arrayAssignment;
+
+        statement.assVariable = arrayName;
+        statement.assExpr = expr;
+        statement.assIndex = arrayIndex;
+
+        return statement;
+
+    }
 
     /*
      * while loop: while whileCondition begin whileBody end
@@ -214,7 +228,12 @@ public class Astat {
 //        System.out.println(">> "+this.getstat());
         if (statementType == assignment) {
             SymbolTable.setValue(assVariable, assExpr.getSymbol());
-        } else if (statementType == varDeclaration) {
+        } else if(statementType == arrayAssignment) {
+            MySymbol symbol = SymbolTable.getSymbol(assVariable);
+            MyArray array = (MyArray)symbol.getValue();
+            array.setSymbol(assIndex, assExpr.getSymbol());
+//            SymbolTable.setValue(assVariable, new MySymbol(array,array.getType()));
+        }else if (statementType == varDeclaration) {
 	    
             if(this.decType == decExpr.getSymbol().getType()){
                 //continue;
