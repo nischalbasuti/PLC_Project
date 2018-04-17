@@ -3,6 +3,7 @@
 /* --------------------------Usercode Section------------------------ */
 package src;
 import java_cup.runtime.*;
+import java.util.*;
 
 %%
 
@@ -77,6 +78,9 @@ char = \'[a-zA-Z0-9 :;\"_,.-]*\'|\"[a-zA-Z0-9 :;\'_,.-]*\"
    between A and Z, a and z, zero and nine, or an underscore. */
 id = [A-Za-z_][A-Za-z_0-9]*
 
+/*arg_list = ([A-Za-z_][A-Za-z_0-9]*,)+*/
+array = \[([A-Za-z_][A-Za-z_0-9]*,)+\]
+
 comment = #.*#
 
 %%
@@ -103,9 +107,16 @@ comment = #.*#
     "-"                { return symbol(sym.MINUS); }
     "*"                { return symbol(sym.TIMES); }
     "/"                { return symbol(sym.DIVIDE); }
+    "="                { return symbol(sym.ASS); }
+
+    /*brackets, parentheses*/
     "("                { return symbol(sym.LPAREN); }
     ")"                { return symbol(sym.RPAREN); }
-    "="                { return symbol(sym.ASS); }
+    "["                { return symbol(sym.LBRACKET); }
+    "]"                { return symbol(sym.RBRACKET); }
+    "<"                { return symbol(sym.LANGLE); }
+    ">"                { return symbol(sym.RANGLE); }
+
     /*comparison operations*/
     "=="               { return symbol(sym.EQ); }
     "!="               { return symbol(sym.NOTEQ); }
@@ -113,11 +124,13 @@ comment = #.*#
     "<="               { return symbol(sym.LESSEREQ); }
     ">"                { return symbol(sym.GREATER); }
     ">="               { return symbol(sym.GREATEREQ);}
+
     /*boolean operations*/
     "and"              { return symbol(sym.AND); }
     "or"               { return symbol(sym.OR); }
     "not"              { return symbol(sym.NOT); }
 
+    /*conditional and flow keywords*/
     "if"               { return symbol(sym.IF); }
     "then"             { return symbol(sym.THEN); }
     "else"             { return symbol(sym.ELSE); }
@@ -132,11 +145,14 @@ comment = #.*#
     "float"            { return symbol(sym.FLOATDEF, sym.FLOATDEF); }
     "boolean"          { return symbol(sym.BOOLEANDEF, sym.BOOLEANDEF); }
     "char"             { return symbol(sym.CHARDEF, sym.CHARDEF); }
+    "array"            { return symbol(sym.ARRAYDEF, sym.ARRAYDEF); }
+    "funcdef"          { return symbol(sym.FUNCDEF, sym.FUNCDEF); }
     
     /*other keywords*/
     "true"             { return symbol(sym.BOOLEAN, new Boolean(true)); }
     "false"            { return symbol(sym.BOOLEAN, new Boolean(false)); }
 
+    /*literals*/
     {int}      { return symbol(sym.INT, new Integer(yytext())); }
     {float}    { return symbol(sym.FLOAT, new Float(yytext())); }
     {char}     { 
@@ -144,7 +160,17 @@ comment = #.*#
                     String str = yytext();
                     return symbol(sym.CHAR, new String(str.substring(1, str.length()-1))); 
                 }
-
+    {array}     {
+                    String listStr = yytext();
+                    listStr = listStr.substring(1, listStr.length()-1);
+                    System.out.println("ARRAY "+ listStr);
+                    
+                    MyArray array = new MyArray();
+                    for(String item : listStr.split(",",0)) {
+                        array.append(item);
+                    }
+                    return symbol(sym.ARRAY, array);
+                }
     {id}       { return symbol(sym.ID, yytext());}
 
     /* Don't do anything if whitespace is found */

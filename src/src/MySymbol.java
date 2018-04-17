@@ -50,10 +50,12 @@ public class MySymbol {
                 retSymbol.setValue( (int)this.getValue() + (int)b.getValue() );
                 break;
             case sym.FLOAT:
-                retSymbol.setValue( Float.valueOf(this.getValue().toString()) + Float.valueOf(b.getValue().toString()) );
+                retSymbol.setValue( Float.valueOf(this.getValue().toString()) 
+                    + Float.valueOf(b.getValue().toString()) );
                 break;
             case sym.CHAR:
-                retSymbol.setValue(this.getValue().toString() + b.getValue().toString() );
+                retSymbol.setValue(this.getValue().toString() 
+                    + b.getValue().toString() );
                 break;
             default:
                 break;
@@ -68,7 +70,8 @@ public class MySymbol {
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() - (int)b.getValue() );
         } else if(retSymbol.getType() == sym.FLOAT) {
-            retSymbol.setValue( Float.valueOf(this.getValue().toString()) - Float.valueOf(b.getValue().toString()) );
+            retSymbol.setValue( Float.valueOf(this.getValue().toString()) 
+                - Float.valueOf(b.getValue().toString()) );
         }
         
         return retSymbol;
@@ -80,7 +83,8 @@ public class MySymbol {
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() / (int)b.getValue() );
         } else if(retSymbol.getType() == sym.FLOAT) {
-            retSymbol.setValue( Float.valueOf(this.getValue().toString()) / Float.valueOf(b.getValue().toString()) );
+            retSymbol.setValue( Float.valueOf(this.getValue().toString()) 
+                / Float.valueOf(b.getValue().toString()) );
         }
         
         return retSymbol;
@@ -92,7 +96,8 @@ public class MySymbol {
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() * (int)b.getValue() );
         } else if(retSymbol.getType() == sym.FLOAT) {
-            retSymbol.setValue( Float.valueOf(this.getValue().toString()) * Float.valueOf(b.getValue().toString()) );
+            retSymbol.setValue( Float.valueOf(this.getValue().toString()) 
+                * Float.valueOf(b.getValue().toString()) );
         }
         
         return retSymbol;
@@ -123,28 +128,32 @@ public class MySymbol {
     public boolean isGreater(MySymbol otherMySymbol) {
         boolean ret = false;
         if(getCompatableType(this, otherMySymbol) != -1) {
-            ret =  Float.valueOf(this.getValue().toString()) > Float.valueOf((otherMySymbol.getValue().toString()));
+            ret =  Float.valueOf(this.getValue().toString())
+                > Float.valueOf((otherMySymbol.getValue().toString()));
         }
         return ret;
     }
     public boolean isGreaterAndEqual(MySymbol otherMySymbol) {
         boolean ret = false;
         if(getCompatableType(this, otherMySymbol) != -1) {
-            ret =  Float.valueOf(this.getValue().toString()) >= Float.valueOf((otherMySymbol.getValue().toString()));
+            ret =  Float.valueOf(this.getValue().toString())
+                >= Float.valueOf((otherMySymbol.getValue().toString()));
         }
         return ret;
     }
     public boolean isLess(MySymbol otherMySymbol) {
         boolean ret = false;
         if(getCompatableType(this, otherMySymbol) != -1) {
-            ret =  Float.valueOf(this.getValue().toString()) < Float.valueOf((otherMySymbol.getValue().toString()));
+            ret =  Float.valueOf(this.getValue().toString()) 
+                < Float.valueOf((otherMySymbol.getValue().toString()));
         }
         return ret;
     }
     public boolean isLessAndEqual(MySymbol otherMySymbol) {
         boolean ret = false;
         if(getCompatableType(this, otherMySymbol) != -1) {
-            ret =  Float.valueOf(this.getValue().toString()) <= Float.valueOf((otherMySymbol.getValue().toString()));
+            ret =  Float.valueOf(this.getValue().toString()) 
+                <= Float.valueOf((otherMySymbol.getValue().toString()));
         }
         return ret;
     }
@@ -163,9 +172,9 @@ public class MySymbol {
     }
     ////////////////////////////////////////////////////////////////////////////
     
-    // This method checks if two Symbol objects are of a compatable datatype.
+    // This method checks if two MySymbol objects are of a compatable datatype.
     // if they are compatable, then it returns the data type of which a resulting
-    // Symbol object should be if an operation is performed on the two objects.
+    // MySymbol object should be if an operation is performed on the two objects.
     private int getCompatableType(MySymbol a, MySymbol b) {
         int retType = -1;
         switch(a.getType()) {
@@ -195,7 +204,10 @@ public class MySymbol {
                 break;
         }
         if(retType == -1) {
-            System.out.println("Type error getCompatableType(). Symbols: "+a+ ", "+b);
+            System.out.println("Type error getCompatableType(). Symbols: " 
+                + a +  ", "+b);
+            System.out.println(SymConverter.getTypeString(a.getType()) + " and "
+                + SymConverter.getTypeString(b.getType()) + " are not compatable.");
             System.exit(1);
         }
         return retType;

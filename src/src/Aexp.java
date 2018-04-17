@@ -7,6 +7,7 @@ public class Aexp {
         FLOAT,
         BOOLEAN,
         CHAR,
+        ARRAY,
         ID,
         EXP
     }
@@ -16,6 +17,12 @@ public class Aexp {
     private String id;
     private Args operands;
     private int operator;
+
+    public Aexp(MyArray a) {
+        this.eType = AexpType.ARRAY;
+        this.type = sym.ARRAY;
+        inum = new MySymbol(a, this.type);
+    }
 
     Aexp(Integer x) {
         eType = AexpType.INTEGER;
@@ -130,6 +137,7 @@ public class Aexp {
                 } 
                 break;
             case CHAR: s = "" + inum; break;
+            case ARRAY: s = "" + inum; break;
             case ID: s = id; break;
             case EXP:
                 switch (operator) {
@@ -160,13 +168,15 @@ public class Aexp {
         Aexp right;
         switch (this.eType) {
             case INTEGER:
-                // expression is a number
                 symbol.setValue(inum.getValue());
                 break;
             case FLOAT:
                 symbol.setValue(inum.getValue());
                 break;
             case CHAR:
+                symbol.setValue(inum.getValue());
+                break;
+            case ARRAY:
                 symbol.setValue(inum.getValue());
                 break;
             case ID:

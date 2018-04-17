@@ -9,12 +9,13 @@ int curr = 1;
 int temp = 1;
 int count = 0; # Count number of iterations. #
 char str = ""; # String to hold fibonacci series. #
+array<char> a = [x,y,z,];
 
 boolean run = true; # Set this to false to stop while loop. #
 while run do
 begin
     count = count + 1;
-    str = str + ", " + prev;
+    str = str + ", " + prev; # Casting prev to string #
     temp = curr;
     curr = prev + curr;
     prev = temp;
@@ -22,16 +23,16 @@ begin
     if count >= 20 then
     begin
         run = false;
-    end
-    else
-    begin
-        print "still running";
     end;
+#    else#
+#    begin#
+#        print "still running";#
+#    end;#
 
-    if not run then
-    begin
-        print "this won't be running anymore "+run;
-    end;
+#    if not run then#
+#    begin#
+#        print "this won't be running anymore "+run;#
+#    end;#
 end;
 
 print str;

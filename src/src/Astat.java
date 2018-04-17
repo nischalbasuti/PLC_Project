@@ -24,23 +24,81 @@ public class Astat {
 
         statement.decVariable = Variable;
         statement.decExpr = expr;
-	switch(type) {
-		case sym.INTDEF:
-			statement.decType = sym.INT;
-			break;
-		case sym.FLOATDEF:
-			statement.decType = sym.FLOAT;
-			break;
-		case sym.BOOLEANDEF:
-			statement.decType = sym.BOOLEAN;
-			break;
-        case sym.CHARDEF:
-            statement.decType = sym.CHAR;
-		default:
-			// TODO: do something useful, dumbass.
-			statement.decType = type;
-			break;
-	}
+        switch(type) {
+            case sym.INTDEF:
+                statement.decType = sym.INT;
+                break;
+            case sym.FLOATDEF:
+                statement.decType = sym.FLOAT;
+                break;
+            case sym.BOOLEANDEF:
+                statement.decType = sym.BOOLEAN;
+                break;
+            case sym.CHARDEF:
+                statement.decType = sym.CHAR;
+                break;
+            case sym.ARRAYDEF:
+                statement.decType = sym.ARRAY;
+                break;
+            default:
+                // TODO: do something useful, dumbass.
+                statement.decType = type;
+                break;
+        }
+
+        return statement;
+    }
+    
+    int decArrayType;
+    public static Astat declare(int type, int arrayType, String Variable, Aexp expr) {
+        Astat statement = new Astat();
+        statement.statementType = varDeclaration;
+
+        statement.decVariable = Variable;
+        statement.decExpr = expr;
+        //TODO: refactor to use SymConverter.
+        switch(type) {
+            case sym.INTDEF:
+                statement.decType = sym.INT;
+                break;
+            case sym.FLOATDEF:
+                statement.decType = sym.FLOAT;
+                break;
+            case sym.BOOLEANDEF:
+                statement.decType = sym.BOOLEAN;
+                break;
+            case sym.CHARDEF:
+                statement.decType = sym.CHAR;
+                break;
+            case sym.ARRAYDEF:
+                statement.decType = sym.ARRAY;
+                break;
+            default:
+                // TODO: do something useful, dumbass.
+                statement.decType = type;
+                break;
+        }
+        switch(arrayType) {
+            case sym.INTDEF:
+                statement.decArrayType = sym.INT;
+                break;
+            case sym.FLOATDEF:
+                statement.decArrayType = sym.FLOAT;
+                break;
+            case sym.BOOLEANDEF:
+                statement.decArrayType = sym.BOOLEAN;
+                break;
+            case sym.CHARDEF:
+                statement.decArrayType = sym.CHAR;
+                break;
+            case sym.ARRAYDEF:
+                statement.decArrayType = sym.ARRAY;
+                break;
+            default:
+                // TODO: do something useful, dumbass.
+                statement.decArrayType = arrayType;
+                break;
+        }
 
         return statement;
     }
@@ -132,26 +190,11 @@ public class Astat {
         return statement;
     }
 
-    String typeToString(int type) {
-        switch(type){
-            case sym.INTDEF: return "int";
-            case sym.FLOATDEF: return "float";
-            case sym.BOOLEANDEF: return "boolean";
-	    
-	    // Do something different here
-            case sym.INT: return "int";
-            case sym.FLOAT: return "float";
-            case sym.BOOLEAN: return "boolean";
-            case sym.CHAR: return "char";
-        }
-        
-        return "wut?";
-    }
     public String getstat() {
         if (statementType == assignment) {
             return assVariable + "=" + assExpr.getexp();
         } else if (statementType == varDeclaration) {
-            return typeToString(this.decType) + " " + decVariable + " = "+decExpr.getexp();
+            return SymConverter.getTypeString(this.decType) + " " + decVariable + " = "+decExpr.getexp();
         }else if (statementType == ifthen) {
             return "if " + ifcondition.getexp() + " " + ifbody.getstat();
         }else if(statementType == ifthenelse){
@@ -179,10 +222,8 @@ public class Astat {
                 System.out.println("TYPE MISS MATCH:");
                 System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
             }
-//            System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getType());
-            
+            decExpr.getSymbol().setType(decArrayType);
             SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
-//            SymbolTable.dump();
         } else if (statementType == ifthen) {
 
             if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
