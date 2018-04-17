@@ -163,7 +163,7 @@ public class MySymbol {
     }
     ////////////////////////////////////////////////////////////////////////////
     
-    // This method checks it two Symbol objects are of a compatable datatype.
+    // This method checks if two Symbol objects are of a compatable datatype.
     // if they are compatable, then it returns the data type of which a resulting
     // Symbol object should be if an operation is performed on the two objects.
     private int getCompatableType(MySymbol a, MySymbol b) {

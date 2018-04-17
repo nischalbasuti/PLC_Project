@@ -31,8 +31,7 @@ program         ::= statement_list:s
 statement_list  ::= statement_list:l statement_part:s
                     {: RESULT = new Lstat(l,s) ; :}
                 |   statement_part:s
-                    {: RESULT = new Lstat(s); :}
-                ;
+                    {: RESULT = new Lstat(s); :};
 
 statement_part  ::= statement:s
                     {: RESULT = s; :}

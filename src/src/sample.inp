@@ -2,6 +2,8 @@
 # Program to print fibonacci series. #
 ######################################
 
+# This is a comment #
+
 int prev = 0;
 int curr = 1;
 int temp = 1;
