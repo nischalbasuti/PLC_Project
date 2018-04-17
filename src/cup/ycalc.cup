@@ -2,7 +2,7 @@ package src;
 import java_cup.runtime.*;
 import java.util.*;
 
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, ASS;
+terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, ASS, ARRAYELE;
 terminal           RPAREN, LPAREN, RBRACKET, LBRACKET, RANGLE, LANGLE, COMMA;
 terminal           IF, THEN, ELSE, WHILE,  DO, BEGIN,  END;
 terminal           PRINT;
@@ -157,6 +157,8 @@ factor          ::= LPAREN boolExp:e RPAREN
                     {: RESULT = new Aexp(c, false); :}
                 | array:a
                     {: RESULT = a; :}
+                | ID:a LBRACKET INT:index RBRACKET
+                    {: RESULT = new Aexp(a, index); :}
                 | ID:i
                     {: RESULT = new Aexp(i, true); :};
 

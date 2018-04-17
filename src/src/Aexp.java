@@ -8,6 +8,7 @@ public class Aexp {
         BOOLEAN,
         CHAR,
         ARRAY,
+        ARRAYELE,
         ID,
         EXP
     }
@@ -17,6 +18,15 @@ public class Aexp {
     private String id;
     private Args operands;
     private int operator;
+    
+    private int index;
+    
+    public Aexp(String arrayName, int index) {
+        this.type = sym.ARRAYELE;
+        this.eType = AexpType.ARRAYELE; //TODO: change
+        this.id = arrayName;
+        this.index = index;
+    }
 
     public Aexp(MyArray a) {
         this.eType = AexpType.ARRAY;
@@ -184,6 +194,12 @@ public class Aexp {
                 break;
             case ARRAY:
                 symbol.setValue(inum.getValue());
+                break;
+            case ARRAYELE:
+                MyArray array = (MyArray)(SymbolTable.getSymbol(id).getValue());
+                this.type = array.getType();
+//                this.type = array.getSymbol(index).getType();
+                symbol = new MySymbol(array.getSymbol(index));
                 break;
             case ID:
                 //expression is a variable
