@@ -8,7 +8,7 @@ int prev = 0;
 int curr = 1;
 int temp = 1;
 int count = 0; # Count number of iterations. #
-array<21> fib = [0,]; # Array to store fibbonacci series. #
+array:21 fib = [0,]; # Array to store fibbonacci series. #
 boolean run = true; # Set this to false to stop while loop. #
 while run do
 begin
@@ -24,15 +24,15 @@ begin
     begin
         run = false;
     end;
-#    else#
-#    begin#
-#        print "still running";#
-#    end;#
-
-#    if not run then#
-#    begin#
-#        print "this won't be running anymore "+run;#
-#    end;#
 end;
 
-print fib;
+
+count = 0;
+char str = "";
+while (count<20) do
+begin
+    str = str+", "+fib[count];
+    count = count+1;
+end;
+print "Array "+fib;
+print "String "+str; 

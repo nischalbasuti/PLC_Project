@@ -113,9 +113,8 @@ comment = #.*#
     ")"                { return symbol(sym.RPAREN); }
     "["                { return symbol(sym.LBRACKET); }
     "]"                { return symbol(sym.RBRACKET); }
-    "<"                { return symbol(sym.LANGLE); }
-    ">"                { return symbol(sym.RANGLE); }
     ","                { return symbol(sym.COMMA); }
+    ":"                { return symbol(sym.COLON); }
 
     /*comparison operations*/
     "=="               { return symbol(sym.EQ); }

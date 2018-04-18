@@ -19,13 +19,24 @@ public class Aexp {
     private Args operands;
     private int operator;
     
-    private int index;
+    private Aexp indexExpr;
     
-    public Aexp(String arrayName, int index) {
+    
+    // All expressions should be evaluated in Aexp.getSymbol(), NOT IN THE CONSTRUCTORS,
+    // if done in the constructors, it might cause a NullPointerException.
+    
+    // example: 
+    // public void MySymbol getSymbol(){
+    //  ...
+    //    int value = (int)this.expressionObject.getSymbol().getValue();
+    //  ...
+    //  }
+    
+    public Aexp(String arrayName, Aexp index) {
         this.type = sym.ARRAYELE;
         this.eType = AexpType.ARRAYELE; //TODO: change
         this.id = arrayName;
-        this.index = index;
+        this.indexExpr = index;
     }
 
     public Aexp(MyArray a) {
@@ -199,6 +210,7 @@ public class Aexp {
                 MyArray array = (MyArray)(SymbolTable.getSymbol(id).getValue());
                 this.type = array.getSize();
 //                this.type = array.getSymbol(index).getType();
+                int index = (int)this.indexExpr.getSymbol().getValue();
                 symbol = new MySymbol(array.getSymbol(index));
                 break;
             case ID:

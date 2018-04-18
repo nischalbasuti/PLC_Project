@@ -205,7 +205,7 @@ public class Astat {
     }
 
     public void execute() {
-        System.out.println(">> "+this.getstat());
+//        System.out.println(">> "+this.getstat());
         if (statementType == assignment) {
             SymbolTable.setValue(assVariable, assExpr.getSymbol());
         } else if(statementType == arrayAssignment) {
@@ -215,14 +215,12 @@ public class Astat {
             array.setSymbol((int)assIndexExp.getSymbol().getValue(), assExpr.getSymbol());
 //            SymbolTable.setValue(assVariable, new MySymbol(array,array.getType()));
         } else if (statementType == varDeclaration) {
-	    
             if(this.decType == decExpr.getSymbol().getType()){
                 //continue;
             } else {
                 System.out.println("TYPE MISS MATCH:");
                 System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
             }
-            
             if(decType == sym.ARRAY) {
                 //TODO: make sure decArraySizeExp is an int
                 int arraySize = (int)decArraySizeExp.getSymbol().getValue();
@@ -233,11 +231,9 @@ public class Astat {
                 SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
             }
         } else if (statementType == ifthen) {
-
             if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
                 ifbody.execute();
             }
-            
         } else if (statementType == ifthenelse) {
            if(ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
                ifbody.execute();
@@ -252,11 +248,8 @@ public class Astat {
                     break;
                 }
             }
-
         } else if (statementType == print) {
-
             System.out.println(printE.getSymbol());
-
         } else if (statementType == block) {
             for (Astat s : blockBody.statementList) {
                 s.execute();
