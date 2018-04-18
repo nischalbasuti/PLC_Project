@@ -50,13 +50,14 @@ public class Astat {
         return statement;
     }
     
-    int decArrayType;
-    public static Astat declare(int type, int arrayType, String Variable, Aexp expr) {
+    Aexp decArraySizeExp;
+    public static Astat declare(int type, Aexp arraySizeExp, String Variable, Aexp expr) {
         Astat statement = new Astat();
         statement.statementType = varDeclaration;
 
         statement.decVariable = Variable;
         statement.decExpr = expr;
+        statement.decArraySizeExp = arraySizeExp;
         //TODO: refactor to use SymConverter.
         switch(type) {
             case sym.INTDEF:
@@ -79,27 +80,6 @@ public class Astat {
                 statement.decType = type;
                 break;
         }
-        switch(arrayType) {
-            case sym.INTDEF:
-                statement.decArrayType = sym.INT;
-                break;
-            case sym.FLOATDEF:
-                statement.decArrayType = sym.FLOAT;
-                break;
-            case sym.BOOLEANDEF:
-                statement.decArrayType = sym.BOOLEAN;
-                break;
-            case sym.CHARDEF:
-                statement.decArrayType = sym.CHAR;
-                break;
-            case sym.ARRAYDEF:
-                statement.decArrayType = sym.ARRAY;
-                break;
-            default:
-                // TODO: do something useful, dumbass.
-                statement.decArrayType = arrayType;
-                break;
-        }
 
         return statement;
     }
@@ -120,14 +100,14 @@ public class Astat {
 
     }
     
-    int assIndex;
-    public static Astat assignment(String arrayName, int arrayIndex, Aexp expr) {
+    Aexp assIndexExp;
+    public static Astat assignment(String arrayName, Aexp arrayIndex, Aexp expr) {
         Astat statement = new Astat();
         statement.statementType = arrayAssignment;
 
         statement.assVariable = arrayName;
         statement.assExpr = expr;
-        statement.assIndex = arrayIndex;
+        statement.assIndexExp = arrayIndex;
 
         return statement;
 
@@ -225,15 +205,16 @@ public class Astat {
     }
 
     public void execute() {
-//        System.out.println(">> "+this.getstat());
+        System.out.println(">> "+this.getstat());
         if (statementType == assignment) {
             SymbolTable.setValue(assVariable, assExpr.getSymbol());
         } else if(statementType == arrayAssignment) {
             MySymbol symbol = SymbolTable.getSymbol(assVariable);
             MyArray array = (MyArray)symbol.getValue();
-            array.setSymbol(assIndex, assExpr.getSymbol());
+            //TODO make sure assIndexExp is an integer.
+            array.setSymbol((int)assIndexExp.getSymbol().getValue(), assExpr.getSymbol());
 //            SymbolTable.setValue(assVariable, new MySymbol(array,array.getType()));
-        }else if (statementType == varDeclaration) {
+        } else if (statementType == varDeclaration) {
 	    
             if(this.decType == decExpr.getSymbol().getType()){
                 //continue;
@@ -241,8 +222,16 @@ public class Astat {
                 System.out.println("TYPE MISS MATCH:");
                 System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
             }
-            decExpr.getSymbol().setType(decArrayType);
-            SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
+            
+            if(decType == sym.ARRAY) {
+                //TODO: make sure decArraySizeExp is an int
+                int arraySize = (int)decArraySizeExp.getSymbol().getValue();
+                MyArray newArray = (MyArray)(decExpr.getSymbol().getValue());
+                newArray.setSize(arraySize);
+                SymbolTable.declare(decType, decVariable, new MySymbol(newArray,decType));
+            } else {
+                SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
+            }
         } else if (statementType == ifthen) {
 
             if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {

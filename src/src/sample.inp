@@ -8,20 +8,17 @@ int prev = 0;
 int curr = 1;
 int temp = 1;
 int count = 0; # Count number of iterations. #
-char str = ""; # String to hold fibonacci series. #
-array<char> a = [1,["a","b","c",],3.0,true,];
-array<int> b = [10,9,8,7,];
-array<int> fib = [0,1,2,3,4,5,6,7,8,9,10,11,1,1,1,1,1,1,1,1,1,];
+array<21> fib = [0,]; # Array to store fibbonacci series. #
 boolean run = true; # Set this to false to stop while loop. #
 while run do
 begin
     count = count + 1;
 
-    fib[count] = count;
-    str = str + ", " + prev; # Casting prev to string #
     temp = curr;
     curr = prev + curr;
     prev = temp;
+
+    fib[count] = prev;
 
     if count >= 20 then
     begin
@@ -37,6 +34,5 @@ begin
 #        print "this won't be running anymore "+run;#
 #    end;#
 end;
-a[1] = true;
-print a;
-print str;
+
+print fib;

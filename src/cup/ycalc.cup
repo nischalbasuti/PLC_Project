@@ -76,8 +76,8 @@ expList         ::= expList:e_list expListPart:e
 
 vardec          ::= type:t ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(t, i, e); :}
-                |  ARRAYDEF: a LANGLE type:t RANGLE ID:i ASS boolExp:e
-                    {: RESULT = Astat.declare(a, t, i, e); :};
+                |  ARRAYDEF: a LANGLE boolExp:size RANGLE ID:i ASS boolExp:e
+                    {: RESULT = Astat.declare(a, size, i, e); :};
 
 type            ::= INTDEF:i
                     {: RESULT = i; :}
@@ -90,7 +90,7 @@ type            ::= INTDEF:i
 
 assignment      ::= ID:i ASS boolExp:e
                     {: RESULT = Astat.assignment(i, e); :}
-                |   ID:a LBRACKET INT:index RBRACKET ASS boolExp:e
+                |   ID:a LBRACKET boolExp:index RBRACKET ASS boolExp:e
                     {: RESULT = Astat.assignment(a, index, e); :};
 
 boolExp         ::= boolExp:e OR boolTerm:t

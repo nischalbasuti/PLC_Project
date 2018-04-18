@@ -13,40 +13,45 @@ import java.util.*;
 public class MyArray {
     private final ArrayList<MySymbol> arrayList = new ArrayList<>();
 
-    private int type;
+    private int size;
     
-    public MyArray(int type) {
-        this.type = type;
+    public MyArray(int size) {
+        this.size = size;
+        arrayList.ensureCapacity(size);
     }
     
-    public MyArray(ExpList expList, int type) {
-        this.type = type;
+    public MyArray(ExpList expList, int size) {
+        this.size = size;
+        arrayList.ensureCapacity(size);
         for(Aexp exp : expList.getExpressionList()){
             this.arrayList.add(exp.getSymbol());
         }
     }
     public MyArray(ExpList expList) {
-        this.type = type;
         for(Aexp exp : expList.getExpressionList()){
             this.arrayList.add(exp.getSymbol());
         }
     }
     
     public MyArray() {
-        this.type = -1;
+        this.size = -1;
     }
     
     public void append(Object value) {
-        int type = (this.type == -1)? sym.CHAR : this.type;
+        int type = (this.size == -1)? sym.CHAR : this.size;
         this.arrayList.add(new MySymbol(value, type)); // TODO: change from char to something else.
     }
     
-    public void setType(int type) {
-        this.type = type;
+    public void setSize(int size) {
+        this.size = size;
+        this.arrayList.ensureCapacity(size);
+        while(this.arrayList.size() < size) {
+            this.arrayList.add(null);
+        }
     }
     
-    public int getType() {
-        return this.type;
+    public int getSize() {
+        return this.arrayList.size();
     }
     
     public MySymbol getSymbol(int index) {
@@ -63,7 +68,7 @@ public class MyArray {
     }
     
     public void setValue(int index, Object value) {
-        this.arrayList.set(index, new MySymbol(value, this.type));
+        this.arrayList.set(index, new MySymbol(value, this.size));
     }
     
     @Override

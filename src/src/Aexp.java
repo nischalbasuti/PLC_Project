@@ -197,7 +197,7 @@ public class Aexp {
                 break;
             case ARRAYELE:
                 MyArray array = (MyArray)(SymbolTable.getSymbol(id).getValue());
-                this.type = array.getType();
+                this.type = array.getSize();
 //                this.type = array.getSymbol(index).getType();
                 symbol = new MySymbol(array.getSymbol(index));
                 break;

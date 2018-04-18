@@ -46,6 +46,10 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
         globalTable.put(id,value);
     }
     
+    static void declareArray(int arraySize, String id, MySymbol value) {
+        SymbolTable.declare(sym.ARRAY, id, value);
+    }
+    
     // Get the type of the symbol
     // i.e sym.INT/FLOAT/BOOLEAN
     static int getType(String id) {
