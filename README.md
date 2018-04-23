@@ -2,19 +2,19 @@
 ## Syntax
 
 ### primitives decleration
-__datatype__ __variablename__ = __expression__;
+_datatype_ _variablename_ = _expression_;
 ### primitives assignment
-__variablename__ = __expression__;
+_variablename_ = _expression_;
 
 ### array decleration
-array:__arraylength__ __variablename__ = [__expression0__, __expression1__, ];
+array:_arraylength_ _variablename_ = [_expression0_, _expression1_, ];
 ### array assignment
-__variablename__[__expression__] = __expression__;
+_variablename_[_expression_] = _expression_;
 
 ### struct decleration
-struct __variablename__ = {__key0__: __expression0__, __key1__; __expression1__, };
+struct _variablename_ = {_key0_: _expression0_, _key1_; _expression1_, };
 ### struct assignment
-__variablename__->__key__ =  __expression__;
+_variablename_->_key_ =  _expression_;
 
 ## Todo
 ### Basic Functionalities (in order of priority)
