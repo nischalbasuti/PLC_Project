@@ -2,17 +2,14 @@
 # Program to print fibonacci series. #
 ######################################
 
-# This is a comment #
-
 int prev = 0;
 int curr = 1;
 int temp = 1;
 int count = 0; # Count number of iterations. #
-array:21 fib = [0,]; # Array to store fibbonacci series. #
+array:20 fib = [0,]; # Array to store fibbonacci series. #
 boolean run = true; # Set this to false to stop while loop. #
 while run do
 begin
-    count = count + 1;
 
     temp = curr;
     curr = prev + curr;
@@ -20,12 +17,13 @@ begin
 
     fib[count] = prev;
 
-    if count >= 20 then
+    if count >= 20-1 then
     begin
         run = false;
     end;
-end;
 
+    count = count + 1;
+end;
 
 count = 0;
 char str = "";
@@ -35,4 +33,7 @@ begin
     count = count+1;
 end;
 print "Array "+fib;
-print "String "+str; 
+print "String "+str;
+struct structvar = {a : 1+2-4, b : 2,};
+structvar->a = 69;
+print structvar->a;

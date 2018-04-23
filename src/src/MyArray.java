@@ -55,6 +55,7 @@ public class MyArray {
     }
     
     public MySymbol getSymbol(int index) {
+        //TODO out of range error
         return this.arrayList.get(index);
     }
     
@@ -64,6 +65,7 @@ public class MyArray {
     }
 
     public Object getValue(int index) {
+        //TODO out of range error
         return this.arrayList.get(index).getValue();
     }
     

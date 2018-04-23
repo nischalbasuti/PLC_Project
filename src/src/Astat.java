@@ -13,6 +13,7 @@ public class Astat {
     public static int funDeclaration = 6;
     public static int returnStatement = 7;
     public static int arrayAssignment = 9;
+    public static int structAssignment = 10;
     /*
      * decleration statement: type variable = expr
      */
@@ -41,6 +42,8 @@ public class Astat {
             case sym.ARRAYDEF:
                 statement.decType = sym.ARRAY;
                 break;
+            case sym.STRUCTDEF:
+                statement.decType = sym.STRUCT;
             default:
                 // TODO: do something useful, dumbass.
                 statement.decType = type;
@@ -111,6 +114,18 @@ public class Astat {
 
         return statement;
 
+    }
+    
+    String assKey;
+    public static Astat assignment(String structName, String structKey, Aexp expr) {
+        Astat statement = new Astat();
+        statement.statementType = structAssignment;
+
+        statement.assVariable = structName;
+        statement.assExpr = expr;
+        statement.assKey = structKey;
+
+        return statement;
     }
 
     /*
@@ -213,7 +228,10 @@ public class Astat {
             MyArray array = (MyArray)symbol.getValue();
             //TODO make sure assIndexExp is an integer.
             array.setSymbol((int)assIndexExp.getSymbol().getValue(), assExpr.getSymbol());
-//            SymbolTable.setValue(assVariable, new MySymbol(array,array.getType()));
+        } else if(statementType == structAssignment) {
+            MySymbol symbol = SymbolTable.getSymbol(assVariable);
+            MyStruct struct = (MyStruct)symbol.getValue();
+            struct.addSymbol(assKey, assExpr.getSymbol());
         } else if (statementType == varDeclaration) {
             if(this.decType == decExpr.getSymbol().getType()){
                 //continue;

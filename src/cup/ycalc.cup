@@ -2,20 +2,23 @@ package src;
 import java_cup.runtime.*;
 import java.util.*;
 
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, ASS, ARRAYELE;
-terminal           RPAREN, LPAREN, RBRACKET, LBRACKET, LESSER, GREATER, COMMA, COLON;
+terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, ASS, ARRAYELE, STRUCTELE;
+terminal           RPAREN, LPAREN, RBRACKET, LBRACKET, LESSER, GREATER, COMMA, COLON, LBRACE, RBRACE;
 terminal           IF, THEN, ELSE, WHILE,  DO, BEGIN,  END;
 terminal           PRINT;
 terminal           EQ, NOTEQ, LESSEREQ, GREATEREQ, AND, OR, NOT;
-terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF, CHARDEF, ARRAYDEF, FUNCDEF;
+terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF, CHARDEF, ARRAYDEF, FUNCDEF, STRUCTDEF;
 terminal Integer   INT;
 terminal Float     FLOAT;
 terminal Boolean   BOOLEAN;
 terminal String    CHAR;
 terminal String    ID;
-terminal           ARRAY;
+terminal           ARRAY, STRUCT;
 
+non terminal KeyValue           keyValuePart;
+non terminal KeyValueList       keyValueList;
 non terminal Aexp               array, expListPart;
+non terminal Aexp               struct;
 non terminal ExpList            expList;
 non terminal Object             program;
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
@@ -76,8 +79,10 @@ expList         ::= expList:e_list expListPart:e
 
 vardec          ::= type:t ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(t, i, e); :}
-                |  ARRAYDEF: a COLON boolExp:size ID:i ASS boolExp:e
-                    {: RESULT = Astat.declare(a, size, i, e); :};
+                |  ARRAYDEF:a COLON boolExp:size ID:i ASS boolExp:e
+                    {: RESULT = Astat.declare(a, size, i, e); :}
+                |  STRUCTDEF:s ID:i ASS boolExp:e
+                    {: RESULT = Astat.declare(s, i, e); :};
 
 type            ::= INTDEF:i
                     {: RESULT = i; :}
@@ -88,11 +93,20 @@ type            ::= INTDEF:i
                 |  CHARDEF:c
                     {: RESULT = c; :};
 
+keyValuePart ::= ID:i COLON boolExp:e
+                        {: RESULT = new KeyValue(i, e); System.out.println(i); :} COMMA;
+
+keyValueList    ::= keyValueList:kv_list keyValuePart:kv_part
+                    {: RESULT = new KeyValueList(kv_list, kv_part); :}
+                |   keyValuePart:kv_part
+                    {: RESULT = new KeyValueList(kv_part); :};
+
 assignment      ::= ID:i ASS boolExp:e
                     {: RESULT = Astat.assignment(i, e); :}
-                |   ID:a LBRACKET boolExp:index RBRACKET ASS boolExp:e
-                    {: RESULT = Astat.assignment(a, index, e); :};
-
+                |   ID:a LBRACKET boolExp:index RBRACKET ASS boolExp:e /* assign array element */
+                    {: RESULT = Astat.assignment(a, index, e); :}
+                |   ID:s MINUS GREATER ID:key ASS boolExp:e /* assign struct element */
+                    {: RESULT = Astat.assignment(s, key, e); :};
 boolExp         ::= boolExp:e OR boolTerm:t
                     {: RESULT = new Aexp(new Args(e, t), sym.OR); :}
                 |   boolTerm:t
@@ -159,10 +173,22 @@ factor          ::= LPAREN boolExp:e RPAREN
                     {: RESULT = new Aexp(c, false); :}
                 | array:a
                     {: RESULT = a; :}
-                | ID:a LBRACKET boolExp:index RBRACKET
+                | struct:s
+                    {: RESULT = s; :}
+                | ID:a LBRACKET boolExp:index RBRACKET /* access array element: id[exp] */
                     {: RESULT = new Aexp(a, index); :}
+                | ID:s MINUS GREATER ID:key /* access struct element: id->keyId */
+                    {: RESULT = new Aexp(s, key); :}
                 | ID:i
                     {: RESULT = new Aexp(i, true); :};
 
+                   /* [a,b,c,e,]*/
 array          ::= LBRACKET expList:e_list RBRACKET
                    {: RESULT = new Aexp(e_list, true); :};
+
+                   /* {a,b,c,d,}*/
+struct         ::= LBRACE keyValueList:kv_list RBRACE
+                   {: RESULT = new Aexp(kv_list); :};
+
+
+/*TODO: - make a class like expList to store key-value pairs, then procede similar to arrays.*/

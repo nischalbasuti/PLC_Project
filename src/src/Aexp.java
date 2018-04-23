@@ -8,6 +8,8 @@ public class Aexp {
         BOOLEAN,
         CHAR,
         ARRAY,
+        STRUCT,
+        STRUCTELE,
         ARRAYELE,
         ID,
         EXP
@@ -32,6 +34,19 @@ public class Aexp {
     //  ...
     //  }
     
+    public Aexp(KeyValueList keyValueList) {
+        this.type = sym.STRUCT;
+        this.eType = AexpType.STRUCT;
+        inum = new MySymbol(new MyStruct(keyValueList), this.type);
+    }
+    
+    String key;
+    public Aexp(String structName, String key) {
+        this.type = sym.STRUCTELE;
+        this.eType = AexpType.STRUCTELE;
+        this.id = structName;
+        this.key = key;
+    }
     public Aexp(String arrayName, Aexp index) {
         this.type = sym.ARRAYELE;
         this.eType = AexpType.ARRAYELE; //TODO: change
@@ -165,6 +180,7 @@ public class Aexp {
                 break;
             case CHAR: s = "" + inum; break;
             case ARRAY: s = "" + inum; break;
+            case STRUCT: s = "" + inum; break;
             case ID: s = id; break;
             case EXP:
                 switch (operator) {
@@ -206,12 +222,20 @@ public class Aexp {
             case ARRAY:
                 symbol.setValue(inum.getValue());
                 break;
+            case STRUCT:
+                symbol.setValue(inum.getValue());
+                break;
             case ARRAYELE:
                 MyArray array = (MyArray)(SymbolTable.getSymbol(id).getValue());
                 this.type = array.getSize();
 //                this.type = array.getSymbol(index).getType();
                 int index = (int)this.indexExpr.getSymbol().getValue();
                 symbol = new MySymbol(array.getSymbol(index));
+                break;
+            case STRUCTELE:
+                MyStruct struct = (MyStruct)(SymbolTable.getSymbol(id).getValue());
+                String key = (String)this.key;
+                symbol = new MySymbol(struct.getSymbol(key));
                 break;
             case ID:
                 //expression is a variable

@@ -115,6 +115,8 @@ comment = #.*#
     "]"                { return symbol(sym.RBRACKET); }
     ","                { return symbol(sym.COMMA); }
     ":"                { return symbol(sym.COLON); }
+    "{"                { return symbol(sym.LBRACE); }
+    "}"                { return symbol(sym.RBRACE); }
 
     /*comparison operations*/
     "=="               { return symbol(sym.EQ); }
@@ -145,6 +147,7 @@ comment = #.*#
     "boolean"          { return symbol(sym.BOOLEANDEF, sym.BOOLEANDEF); }
     "char"             { return symbol(sym.CHARDEF, sym.CHARDEF); }
     "array"            { return symbol(sym.ARRAYDEF, sym.ARRAYDEF); }
+    "struct"           { return symbol(sym.STRUCTDEF, sym.STRUCTDEF); }
     "funcdef"          { return symbol(sym.FUNCDEF, sym.FUNCDEF); }
     
     /*other keywords*/
