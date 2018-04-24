@@ -34,6 +34,9 @@ begin
 end;
 print "Array "+fib;
 print "String "+str;
-struct structvar = {a : 1+2-4, b : 2,};
-structvar->a = 69;
-print structvar->a;
+
+## cartesian product ##
+struct person = {name : "nischal", age : 21, major: "CS", };
+print person->name;
+print person->age + 3;
+print person->name + " is " + person->age +" years old";

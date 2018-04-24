@@ -94,7 +94,7 @@ type            ::= INTDEF:i
                     {: RESULT = c; :};
 
 keyValuePart ::= ID:i COLON boolExp:e
-                        {: RESULT = new KeyValue(i, e); System.out.println(i); :} COMMA;
+                        {: RESULT = new KeyValue(i, e);:} COMMA;
 
 keyValueList    ::= keyValueList:kv_list keyValuePart:kv_part
                     {: RESULT = new KeyValueList(kv_list, kv_part); :}

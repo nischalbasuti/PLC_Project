@@ -217,17 +217,5 @@ public class MySymbol {
     public String toString() {
         return this.value.toString();
 //        return "[value: " + this.value.toString() + ", type: " + SymConverter.getTypeString(this.type) +"]";
-//        switch(this.type) {
-//            case sym.INT:
-//                return "[value: " + ((Integer)this.value).toString() + ", type: " + this.type+ "]";
-//            case sym.FLOAT:
-//                return "[value: " + ((Float)this.value).toString() + ", type: " + this.type +  "]";
-//            case sym.BOOLEAN:
-//                return "[value: " + ((Boolean)this.value).toString() + ", type: " + this.type +"]";
-//            case sym.CHAR:
-//                return "[value: " + (this.value).toString() + ", type: " + this.type +"]";
-//            default:
-//                return "[value: " + this.value.toString() + ", (fucked up)type: " + this.type +"]";
-//        }
     }
 }

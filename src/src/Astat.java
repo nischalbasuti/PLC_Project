@@ -3,98 +3,58 @@ package src;
 public class Astat {
 
     int statementType;
-    public static int assignment = 0;
-    public static int varDeclaration = 1;
-    public static int print = 2;
-    public static int ifthen = 3;
-    public static int ifthenelse = 8;
-    public static int block = 4;
-    public static int whileloop = 5;
-    public static int funDeclaration = 6;
-    public static int returnStatement = 7;
-    public static int arrayAssignment = 9;
-    public static int structAssignment = 10;
+    public static final int ASSIGNMENT = 0;
+    public static final int VAR_DECLARATION = 1;
+    public static final int PRINT = 2;
+    public static final int IFTHEN = 3;
+    public static final int IFTHENELSE = 8;
+    public static final int BLOCK = 4;
+    public static final int WHILELOOP = 5;
+    public static final int FUN_DECLARATION = 6;
+    public static final int RETURN_STATEMENT = 7;
+    public static final int ARRAY_ASSIGNMENT = 9;
+    public static final int STRUCT_ASSIGNMENT = 10;
     /*
      * decleration statement: type variable = expr
      */
     String decVariable;
     Aexp decExpr;
     int decType;
+
     public static Astat declare(int type, String Variable, Aexp expr) {
         Astat statement = new Astat();
-        statement.statementType = varDeclaration;
+        statement.statementType = VAR_DECLARATION;
 
         statement.decVariable = Variable;
         statement.decExpr = expr;
-        switch(type) {
-            case sym.INTDEF:
-                statement.decType = sym.INT;
-                break;
-            case sym.FLOATDEF:
-                statement.decType = sym.FLOAT;
-                break;
-            case sym.BOOLEANDEF:
-                statement.decType = sym.BOOLEAN;
-                break;
-            case sym.CHARDEF:
-                statement.decType = sym.CHAR;
-                break;
-            case sym.ARRAYDEF:
-                statement.decType = sym.ARRAY;
-                break;
-            case sym.STRUCTDEF:
-                statement.decType = sym.STRUCT;
-            default:
-                // TODO: do something useful, dumbass.
-                statement.decType = type;
-                break;
-        }
+        statement.decType = SymConverter.defTypetoDataType(type);
 
         return statement;
     }
-    
+
     Aexp decArraySizeExp;
+
     public static Astat declare(int type, Aexp arraySizeExp, String Variable, Aexp expr) {
         Astat statement = new Astat();
-        statement.statementType = varDeclaration;
+        statement.statementType = VAR_DECLARATION;
 
         statement.decVariable = Variable;
         statement.decExpr = expr;
         statement.decArraySizeExp = arraySizeExp;
-        //TODO: refactor to use SymConverter.
-        switch(type) {
-            case sym.INTDEF:
-                statement.decType = sym.INT;
-                break;
-            case sym.FLOATDEF:
-                statement.decType = sym.FLOAT;
-                break;
-            case sym.BOOLEANDEF:
-                statement.decType = sym.BOOLEAN;
-                break;
-            case sym.CHARDEF:
-                statement.decType = sym.CHAR;
-                break;
-            case sym.ARRAYDEF:
-                statement.decType = sym.ARRAY;
-                break;
-            default:
-                // TODO: do something useful, dumbass.
-                statement.decType = type;
-                break;
-        }
+        statement.decType = SymConverter.defTypetoDataType(type);
 
         return statement;
     }
 
     /*
      * assignment statement: variable = expr
-     */    
+     */
     String assVariable;
     Aexp assExpr;
+
     public static Astat assignment(String Variable, Aexp expr) {
         Astat statement = new Astat();
-        statement.statementType = assignment;
+        statement.statementType = ASSIGNMENT;
 
         statement.assVariable = Variable;
         statement.assExpr = expr;
@@ -102,11 +62,12 @@ public class Astat {
         return statement;
 
     }
-    
+
     Aexp assIndexExp;
+
     public static Astat assignment(String arrayName, Aexp arrayIndex, Aexp expr) {
         Astat statement = new Astat();
-        statement.statementType = arrayAssignment;
+        statement.statementType = ARRAY_ASSIGNMENT;
 
         statement.assVariable = arrayName;
         statement.assExpr = expr;
@@ -115,11 +76,12 @@ public class Astat {
         return statement;
 
     }
-    
+
     String assKey;
+
     public static Astat assignment(String structName, String structKey, Aexp expr) {
         Astat statement = new Astat();
-        statement.statementType = structAssignment;
+        statement.statementType = STRUCT_ASSIGNMENT;
 
         statement.assVariable = structName;
         statement.assExpr = expr;
@@ -137,7 +99,7 @@ public class Astat {
 
     public static Astat whileloop(Aexp condition, Astat WhileBody) {
         Astat statement = new Astat();
-        statement.statementType = whileloop;
+        statement.statementType = WHILELOOP;
         statement.whileCondition = condition;
         statement.whileBody = WhileBody;
         return statement;
@@ -152,21 +114,22 @@ public class Astat {
 
     public static Astat ifthen(Aexp Condition, Astat Ifbody) {
         Astat statement = new Astat();
-        statement.statementType = ifthen;
+        statement.statementType = IFTHEN;
         statement.ifcondition = Condition;
         statement.ifbody = Ifbody;
 
         return statement;
     }
-    
+
     /*
      * if then else statement: if ifcondition then ifbody else elsebody
      *
      */
     Astat elsebody;
+
     public static Astat ifthenelse(Aexp Condition, Astat ifbody, Astat elsebody) {
         Astat statement = new Astat();
-        statement.statementType = ifthenelse;
+        statement.statementType = IFTHENELSE;
         statement.ifcondition = Condition;
         statement.ifbody = ifbody;
         statement.elsebody = elsebody;
@@ -182,7 +145,7 @@ public class Astat {
     public static Astat print(Aexp expr) {
 
         Astat statement = new Astat();
-        statement.statementType = print;
+        statement.statementType = PRINT;
         statement.printE = expr;
         return statement;
     }
@@ -194,25 +157,25 @@ public class Astat {
 
     public static Astat block(Lstat l) {
         Astat statement = new Astat();
-        statement.statementType = block;
+        statement.statementType = BLOCK;
         statement.blockBody = l;
         return statement;
     }
 
     public String getstat() {
-        if (statementType == assignment) {
+        if (statementType == ASSIGNMENT) {
             return assVariable + "=" + assExpr.getexp();
-        } else if (statementType == varDeclaration) {
-            return SymConverter.getTypeString(this.decType) + " " + decVariable + " = "+decExpr.getexp();
-        }else if (statementType == ifthen) {
+        } else if (statementType == VAR_DECLARATION) {
+            return SymConverter.getTypeString(this.decType) + " " + decVariable + " = " + decExpr.getexp();
+        } else if (statementType == IFTHEN) {
             return "if " + ifcondition.getexp() + " " + ifbody.getstat();
-        }else if(statementType == ifthenelse){
+        } else if (statementType == IFTHENELSE) {
             return "if then else TODO"; //TODO
-        } else if (statementType == print) {
+        } else if (statementType == PRINT) {
             return "print " + printE.getexp();
-        } else if (statementType == whileloop) {
-            return "while " + whileCondition.getexp()+ " do " + whileBody.getstat();
-        } else if (statementType == block) {
+        } else if (statementType == WHILELOOP) {
+            return "while " + whileCondition.getexp() + " do " + whileBody.getstat();
+        } else if (statementType == BLOCK) {
             return "block";
         } else {
             return "unknown";
@@ -220,58 +183,67 @@ public class Astat {
     }
 
     public void execute() {
-//        System.out.println(">> "+this.getstat());
-        if (statementType == assignment) {
-            SymbolTable.setValue(assVariable, assExpr.getSymbol());
-        } else if(statementType == arrayAssignment) {
-            MySymbol symbol = SymbolTable.getSymbol(assVariable);
-            MyArray array = (MyArray)symbol.getValue();
-            //TODO make sure assIndexExp is an integer.
-            array.setSymbol((int)assIndexExp.getSymbol().getValue(), assExpr.getSymbol());
-        } else if(statementType == structAssignment) {
-            MySymbol symbol = SymbolTable.getSymbol(assVariable);
-            MyStruct struct = (MyStruct)symbol.getValue();
-            struct.addSymbol(assKey, assExpr.getSymbol());
-        } else if (statementType == varDeclaration) {
-            if(this.decType == decExpr.getSymbol().getType()){
-                //continue;
-            } else {
-                System.out.println("TYPE MISS MATCH:");
-                System.out.println(this.getstat()+" | "+decType+ " " +decVariable+" "+decExpr.getSymbol().getType());
-            }
-            if(decType == sym.ARRAY) {
-                //TODO: make sure decArraySizeExp is an int
-                int arraySize = (int)decArraySizeExp.getSymbol().getValue();
-                MyArray newArray = (MyArray)(decExpr.getSymbol().getValue());
-                newArray.setSize(arraySize);
-                SymbolTable.declare(decType, decVariable, new MySymbol(newArray,decType));
-            } else {
-                SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
-            }
-        } else if (statementType == ifthen) {
-            if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
-                ifbody.execute();
-            }
-        } else if (statementType == ifthenelse) {
-           if(ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
-               ifbody.execute();
-           } else {
-               elsebody.execute();
-           }
-        } else if (statementType == whileloop) {
-            for (;;) {
-                if (whileCondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
-                    whileBody.execute();
-                } else {
-                    break;
+        // System.out.println(">> "+this.getstat());
+        switch (statementType) {
+            case ASSIGNMENT:
+                SymbolTable.setValue(assVariable, assExpr.getSymbol());
+                break;
+            case ARRAY_ASSIGNMENT:
+                MySymbol symbolArray = SymbolTable.getSymbol(assVariable);
+                MyArray array = (MyArray) symbolArray.getValue();
+                //TODO make sure assIndexExp is an integer.
+                array.setSymbol((int) assIndexExp.getSymbol().getValue(), assExpr.getSymbol());
+                break;
+            case STRUCT_ASSIGNMENT:
+                MySymbol symbolStruct = SymbolTable.getSymbol(assVariable);
+                MyStruct struct = (MyStruct) symbolStruct.getValue();
+                struct.addSymbol(assKey, assExpr.getSymbol());
+                break;
+            case VAR_DECLARATION:
+                if (this.decType != decExpr.getSymbol().getType()) {
+                    System.out.println("TYPE MISS MATCH:");
+                    System.out.println(this.getstat() + " | " + decType + " " + decVariable + " " + decExpr.getSymbol().getType());
                 }
-            }
-        } else if (statementType == print) {
-            System.out.println(printE.getSymbol());
-        } else if (statementType == block) {
-            for (Astat s : blockBody.statementList) {
-                s.execute();
-            }
+
+                if (decType == sym.ARRAY) {
+                    //TODO: make sure decArraySizeExp is an int
+                    int arraySize = (int) decArraySizeExp.getSymbol().getValue();
+                    MyArray newArray = (MyArray) (decExpr.getSymbol().getValue());
+                    newArray.setSize(arraySize);
+                    SymbolTable.declare(decType, decVariable, new MySymbol(newArray, decType));
+                } else {
+                    SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
+                }
+                break;
+            case IFTHEN:
+                if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
+                    ifbody.execute();
+                }
+                break;
+            case IFTHENELSE:
+                if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
+                    ifbody.execute();
+                } else {
+                    elsebody.execute();
+                }
+                break;
+            case WHILELOOP:
+                for (;;) {
+                    if (whileCondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
+                        whileBody.execute();
+                    } else {
+                        break;
+                    }
+                }
+                break;
+            case PRINT:
+                System.out.println(printE.getSymbol());
+                break;
+            case BLOCK:
+                for (Astat s : blockBody.statementList) {
+                    s.execute();
+                }
+                break;
         }
     }
 }

@@ -33,7 +33,7 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     // Used to create a new variable
     static void declare(int type, String id, MySymbol value) {
         if(type != value.getType()) {
-            System.out.println("Type Error in SymbolTable.declare()");
+            System.out.println("Type Error in SymbolTable.declare() | "+type+" "+value.getType());
             SymbolTable.dump();
         }
         // TODO: handle variables that are aleady defined.
