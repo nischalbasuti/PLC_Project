@@ -57,7 +57,7 @@
     <target name="cup" depends = "init">
         <cup srcfile="${cup}/ycalc.cup"
              destdir="${java}"
-             expect="3"
+             expect="1"
         />
     </target>
 

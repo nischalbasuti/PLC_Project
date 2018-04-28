@@ -108,6 +108,8 @@ comment = #.*#
     "/"                { return symbol(sym.DIVIDE); }
     "="                { return symbol(sym.ASS); }
 
+    "->"               { return symbol(sym.ARROW); }
+
     /*brackets, parentheses*/
     "("                { return symbol(sym.LPAREN); }
     ")"                { return symbol(sym.RPAREN); }

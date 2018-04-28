@@ -2,7 +2,7 @@ package src;
 import java_cup.runtime.*;
 import java.util.*;
 
-terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, ASS, ARRAYELE, STRUCTELE;
+terminal           SEMI, PLUS, MINUS, TIMES, DIVIDE, ASS, ARRAYELE, STRUCTELE, ARROW;
 terminal           RPAREN, LPAREN, RBRACKET, LBRACKET, LESSER, GREATER, COMMA, COLON, LBRACE, RBRACE;
 terminal           IF, THEN, ELSE, WHILE,  DO, BEGIN,  END;
 terminal           PRINT;
@@ -133,7 +133,7 @@ assignment      ::= ID:i ASS boolExp:e
                     {: RESULT = Astat.assignment(i, e); :}
                 |   ID:a LBRACKET boolExp:index RBRACKET ASS boolExp:e /* assign array element */
                     {: RESULT = Astat.assignment(a, index, e); :}
-                |   ID:s MINUS GREATER ID:key ASS boolExp:e /* assign struct element */
+                |   ID:s ARROW ID:key ASS boolExp:e /* assign struct element */
                     {: RESULT = Astat.assignment(s, key, e); :};
 
 boolExp         ::= boolExp:e OR boolTerm:t
@@ -208,7 +208,7 @@ factor          ::= LPAREN boolExp:e RPAREN
                     {: RESULT = fcall; :}
                 | ID:a LBRACKET boolExp:index RBRACKET /* access array element: id[exp] */
                     {: RESULT = new Aexp(a, index); :}
-                | ID:s MINUS GREATER ID:key /* access struct element: id->keyId */
+                | ID:s ARROW ID:key /* access struct element: id->keyId */
                     {: RESULT = new Aexp(s, key); :}
                 | ID:i
                     {: RESULT = new Aexp(i, true); :};
