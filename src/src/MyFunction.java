@@ -25,7 +25,7 @@ public class MyFunction {
     
     public MySymbol call(ExpList expList) {
         // Change state to use this functions local symbol table
-        SymbolTable.setCurrentSymbolTableToLocal(this.functionName);
+        SymbolTable.pushSymbolTable();
         
         // Check if number of arguments are correct.
         if(argumentsList.getArgumentsList().size() != expList.expressionList.size()) {
@@ -52,8 +52,8 @@ public class MyFunction {
         
         // TODO: get return value, maybe use a dedicated "return" variable?
         
-        // restore the symbol table to global.
-        SymbolTable.setCurrentSymbolTableToGlobal();
+        // restore the symbol table to previous scope.
+        SymbolTable.popSymbolTable();
         
         return returnSymbol;
     }

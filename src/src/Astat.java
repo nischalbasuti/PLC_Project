@@ -249,12 +249,7 @@ public class Astat {
                 }
                 break;
             case FUN_DECLARATION:
-                SymbolTable.createLocalSymbolTable(decFunction.functionName);
                 SymbolTable.declare(sym.FUNCDEF, decFunction.functionName, new MySymbol(decFunction, sym.FUNCDEF));
-                
-//                ExpList testExpList = new ExpList(new Aexp(1));
-//                testExpList.append(new Aexp("sup",false));
-//                decFunction.call(testExpList);
                 break;
             case RETURN_STATEMENT:
                 // use the public variable Astat.returnExp in MyFunction.call() to get return value.

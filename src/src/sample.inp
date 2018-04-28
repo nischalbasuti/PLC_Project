@@ -34,13 +34,23 @@ begin
 end;
 print "Array "+fib;
 print "String "+str;
+###########################################
 
-## cartesian product ##
+###########################################
+# Demonstrating cartesian product(struct) #
+###########################################
+
 struct person = {name : "nischal", age : 21, major: "CS", };
 print person->name;
 print person->age + 3;
 print person->name + " is " + person->age +" years old";
 
+###########################################
+
+
+###########################
+# Demonstrating Functions #
+###########################
 char str="global fuck";
 char globStr="global fuck globStr";
 def myfunction(int a, char foo,)
@@ -60,8 +70,14 @@ print "from global: "+globStr;
 
 def functwo(int arg1,)
 begin
-    char wutt = "wutt";
-    return wutt+arg1;
+    char str = "";
+    if arg1 == 1 then
+    begin
+        str = str+functwo(2,);
+    end;
+    return str+arg1;
 end;
 
-print functwo(111,);
+char returnedChar =  functwo(1,);
+print returnedChar;
+#############################

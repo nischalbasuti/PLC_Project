@@ -215,7 +215,12 @@ public class MySymbol {
     
     @Override
     public String toString() {
-        return this.value.toString();
+        try{
+            return this.value.toString();
+        } catch (Exception e) {
+            return "NullPointerSHIZZZZZ..";
+        }
+            
 //        return "[value: " + this.value.toString() + ", type: " + SymConverter.getTypeString(this.type) +"]";
     }
 }
