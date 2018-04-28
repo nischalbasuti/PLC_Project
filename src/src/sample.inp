@@ -42,10 +42,18 @@ print person->age + 3;
 print person->name + " is " + person->age +" years old";
 
 char str="global fuck";
+char globStr="global fuck globStr";
 def myfunction(int a, char foo,)
 begin
     char str = "local fuck";
-    print str;
+    print ""+a+" "+foo+" "+str;
+    print "from local: "+globStr;
+    globStr = "modified in local";
 end;
 
 print str;
+
+myfunction(1,"sup",);
+
+print str;
+print "from global: "+globStr;

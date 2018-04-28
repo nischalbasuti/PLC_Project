@@ -10,14 +10,15 @@ package src;
  * @author nischal
  */
 public class MyFunction {
-    Astat statement;
+    Lstat statements;
     ArgumentsList argumentsList;
     String functionName;
     
-    MySymbol returnSymbol;
+    // TODO: check if return type is okay.
+    MySymbol returnSymbol = new MySymbol();
 
-    public MyFunction(String functionName, ArgumentsList argumentsList, Astat statement) {
-        this.statement = statement;
+    public MyFunction(String functionName, ArgumentsList argumentsList, Lstat statements) {
+        this.statements = statements;
         this.argumentsList = argumentsList;
         this.functionName = functionName;
     }
@@ -36,16 +37,18 @@ public class MyFunction {
         
         // Declare the arguments in the symbol table.
         for(int i = 0; i < argumentsList.getArgumentsList().size(); i++) {
-            SymbolTable.declare(argumentsList.getArgumentsList().get(i).type, 
+            SymbolTable.declare(SymConverter.defTypetoDataType(argumentsList.getArgumentsList().get(i).type), 
                 argumentsList.getArgumentsList().get(i).name,
                 expList.expressionList.get(i).getSymbol());
         }
         
-        // Run the body of the function.
-//        for(Astat statement: this.statementList.statementList) {
-//            statement.execute();
-//        }
-        this.statement.execute();
+        for (Astat statement : this.statements.statementList) {
+            statement.execute();
+            if (statement.statementType == Astat.RETURN_STATEMENT) {
+                this.returnSymbol = statement.returnExp.getSymbol();
+                break;
+            }
+        }
         
         // TODO: get return value, maybe use a dedicated "return" variable?
         

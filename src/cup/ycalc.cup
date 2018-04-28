@@ -26,7 +26,7 @@ non terminal ArgumentsList       argumentList;
 
 non terminal Object             program;
 non terminal Aexp               functionCall;
-non terminal Astat             functionDef;
+non terminal Astat              functionDef;
 /*todo find a way to store function body, maybe in a list<Lstat>, and/or check what Astat.block is doing*/
 
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
@@ -65,6 +65,8 @@ statement       ::= assignment:s
                     {: RESULT = s; :}
                 | functionDef:f
                     {: RESULT = f; :}
+                | boolExp:e
+                    {: RESULT = Astat.blankExpression(e); :}
                 | BEGIN statement_list:s END
                     {: RESULT = Astat.block(s); :};
 
@@ -101,11 +103,11 @@ argumentList    ::= argumentList:a_list argumentPart:a
                 |   argumentPart:a
                     {: RESULT = new ArgumentsList(a); :};
 
-functionDef     ::= FUNCDEF:f ID:i LPAREN argumentList:a_list RPAREN statement:s
+functionDef     ::= FUNCDEF:f ID:i LPAREN argumentList:a_list RPAREN BEGIN statement_list:s END
                     {: RESULT = Astat.declareFunction(new MyFunction(i,a_list,s)); :};
 
 functionCall    ::= ID:i LPAREN expList:e_list RPAREN
-                    {:  :};
+                    {: RESULT = new Aexp(i, e_list); :};
 
 type            ::= INTDEF:i
                     {: RESULT = i; :}
@@ -130,6 +132,7 @@ assignment      ::= ID:i ASS boolExp:e
                     {: RESULT = Astat.assignment(a, index, e); :}
                 |   ID:s MINUS GREATER ID:key ASS boolExp:e /* assign struct element */
                     {: RESULT = Astat.assignment(s, key, e); :};
+
 boolExp         ::= boolExp:e OR boolTerm:t
                     {: RESULT = new Aexp(new Args(e, t), sym.OR); :}
                 |   boolTerm:t
@@ -198,6 +201,8 @@ factor          ::= LPAREN boolExp:e RPAREN
                     {: RESULT = a; :}
                 | struct:s
                     {: RESULT = s; :}
+                | functionCall:fcall
+                    {: RESULT = fcall; :}
                 | ID:a LBRACKET boolExp:index RBRACKET /* access array element: id[exp] */
                     {: RESULT = new Aexp(a, index); :}
                 | ID:s MINUS GREATER ID:key /* access struct element: id->keyId */

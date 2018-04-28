@@ -10,6 +10,14 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     
     static HashMap<String, SymbolTable> localSymbolTables;
     
+    String name = "global";
+    public SymbolTable(){
+        
+    }
+    public SymbolTable(String name){
+        this.name = name;
+    }
+    
     static {
         globalTable = new SymbolTable();
         currentTable = new SymbolTable();
@@ -20,7 +28,7 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     
     // Create a new symbol table. should be called when a function is declared.
     static public void createLocalSymbolTable(String functionName) {
-        SymbolTable.localSymbolTables.put(functionName, new SymbolTable());
+        SymbolTable.localSymbolTables.put(functionName, new SymbolTable(functionName));
     }
    
     // Change the current symbol table to a local one. should be called when a 
@@ -36,17 +44,34 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     }
     
     static public void dump() {
-        System.out.println("***SymbolTable Dump***");
+        System.out.println("\n***SymbolTable Dump***");
+	    System.out.println("Current table: "+currentTable.name);
+        System.out.println(currentTable.toString());
+        System.out.println("******************************\n");
+    }
+    static public void dumpGlobal() {
+        System.out.println("\n***SymbolTable Dump***");
 	    System.out.println(globalTable.toString());
+        System.out.println("*****************************\n");
     }
     
     // Used to set the value of an existing variable.
     static void setValue(String id, MySymbol value){
-        if(currentTable.get(id).getType() != value.getType()) {
-            System.out.println("Type Error in SymbolTable.setValue()");
-            SymbolTable.dump();
+        if(currentTable.containsKey(id)) {
+            if(currentTable.get(id).getType() != value.getType()) {
+                System.out.println("Type Error in SymbolTable.setValue()");
+                SymbolTable.dump();
+            }
+            currentTable.put(id,value);            
+        } else if(globalTable.containsKey(id)) {
+            if(globalTable.get(id).getType() != value.getType()) {
+                System.out.println("Type Error in SymbolTable.setValue()");
+                SymbolTable.dump();
+            }
+            globalTable.put(id,value);            
+        } else {
+            System.out.println(id + " was not declared.");
         }
-        currentTable.put(id,value);
     }
     
     // Used to create a new variable.

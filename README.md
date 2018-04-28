@@ -18,8 +18,8 @@ _variablename_->_key_ =  _expression_;
 
 ## Todo
 ### Basic Functionalities (in order of priority)
-- Implement functions (along with local and global variables).
-TODO: check if local variables will have side effects on repeated function calls.
+- Implement return.
+TODO: check if local variables will have side effects on repeated function calls.( maybe clear the functions symbol table after function call? ).
 - Variable initialization.
 - Type checking.(sorta done-ish, need to display proper errors and stuff)
 

@@ -14,6 +14,27 @@ public class Astat {
     public static final int RETURN_STATEMENT = 7;
     public static final int ARRAY_ASSIGNMENT = 9;
     public static final int STRUCT_ASSIGNMENT = 10;
+    public static final int BLANK_EXPRESSION = 11;
+    
+    Aexp blankExp;
+    public static Astat blankExpression(Aexp exp){
+        Astat statement = new Astat();
+        statement.statementType = BLANK_EXPRESSION;
+        statement.blankExp = exp;
+        return statement;
+    }
+    
+    /*
+     * Return statement 
+     */
+    
+    public Aexp returnExp;
+    public static Astat returnStatement(Aexp exp) {
+        Astat statement = new Astat();
+        statement.statementType = RETURN_STATEMENT;
+        statement.returnExp = exp;
+        return statement;
+    }
     
     /*
      * function delcaration: type functionName(args,) statement
@@ -174,22 +195,23 @@ public class Astat {
     }
 
     public String getstat() {
-        if (statementType == ASSIGNMENT) {
-            return assVariable + "=" + assExpr.getexp();
-        } else if (statementType == VAR_DECLARATION) {
-            return SymConverter.getTypeString(this.decType) + " " + decVariable + " = " + decExpr.getexp();
-        } else if (statementType == IFTHEN) {
-            return "if " + ifcondition.getexp() + " " + ifbody.getstat();
-        } else if (statementType == IFTHENELSE) {
-            return "if then else TODO"; //TODO
-        } else if (statementType == PRINT) {
-            return "print " + printE.getexp();
-        } else if (statementType == WHILELOOP) {
-            return "while " + whileCondition.getexp() + " do " + whileBody.getstat();
-        } else if (statementType == BLOCK) {
-            return "block";
-        } else {
-            return "unknown";
+        switch (statementType) {
+            case ASSIGNMENT:
+                return assVariable + "=" + assExpr.getexp();
+            case VAR_DECLARATION:
+                return SymConverter.getTypeString(this.decType) + " " + decVariable + " = " + decExpr.getexp();
+            case IFTHEN:
+                return "if " + ifcondition.getexp() + " " + ifbody.getstat();
+            case IFTHENELSE:
+                return "if then else TODO"; //TODO
+            case PRINT:
+                return "print " + printE.getexp();
+            case WHILELOOP:
+                return "while " + whileCondition.getexp() + " do " + whileBody.getstat();
+            case BLOCK:
+                return "block";
+            default:
+                return "unknown";
         }
     }
 
@@ -230,9 +252,12 @@ public class Astat {
                 SymbolTable.createLocalSymbolTable(decFunction.functionName);
                 SymbolTable.declare(sym.FUNCDEF, decFunction.functionName, new MySymbol(decFunction, sym.FUNCDEF));
                 
-                ExpList testExpList = new ExpList(new Aexp(1));
-                testExpList.append(new Aexp(2));
-                decFunction.call(testExpList);
+//                ExpList testExpList = new ExpList(new Aexp(1));
+//                testExpList.append(new Aexp("sup",false));
+//                decFunction.call(testExpList);
+                break;
+            case RETURN_STATEMENT:
+                // use the public variable Astat.returnExp in MyFunction.call() to get return value.
                 break;
             case IFTHEN:
                 if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
@@ -262,6 +287,10 @@ public class Astat {
                 for (Astat s : blockBody.statementList) {
                     s.execute();
                 }
+                break;
+            case BLANK_EXPRESSION:
+                // blank expression
+                blankExp.getSymbol();
                 break;
         }
     }

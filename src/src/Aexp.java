@@ -12,7 +12,8 @@ public class Aexp {
         STRUCTELE,
         ARRAYELE,
         ID,
-        EXP
+        EXP,
+        FUNCTION
     }
     private int type;
     private AexpType eType;
@@ -33,6 +34,14 @@ public class Aexp {
     //    int value = (int)this.expressionObject.getSymbol().getValue();
     //  ...
     //  }
+    
+    ExpList functionArgExpList;
+    public Aexp(String functionName, ExpList expList){
+        this.type = sym.FUNCDEF;
+        this.functionArgExpList = expList;
+        this.eType = AexpType.FUNCTION;
+        this.id = functionName;
+    }
     
     public Aexp(KeyValueList keyValueList) {
         this.type = sym.STRUCT;
@@ -247,6 +256,12 @@ public class Aexp {
                     e.printStackTrace();
                     System.exit(0);
                 }
+                break;
+            case FUNCTION:
+                MyFunction function = (MyFunction) SymbolTable.getSymbol(id).getValue();
+                function.call(functionArgExpList);
+                symbol = new MySymbol(function.returnSymbol);
+                
                 break;
             case EXP:
                 left = operands.getfi();
