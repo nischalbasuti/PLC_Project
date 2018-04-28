@@ -140,6 +140,7 @@ comment = #.*#
     "do"               { return symbol(sym.DO); }
     "begin"            { return symbol(sym.BEGIN); }
     "end"              { return symbol(sym.END); }
+    "return"           { return symbol(sym.RETURN);}
     
     /*variable declaration stuff*/
     "int"              { return symbol(sym.INTDEF, sym.INTDEF); }
@@ -148,7 +149,7 @@ comment = #.*#
     "char"             { return symbol(sym.CHARDEF, sym.CHARDEF); }
     "array"            { return symbol(sym.ARRAYDEF, sym.ARRAYDEF); }
     "struct"           { return symbol(sym.STRUCTDEF, sym.STRUCTDEF); }
-    "def"          { return symbol(sym.FUNCDEF, sym.FUNCDEF); }
+    "def"              { return symbol(sym.FUNCDEF, sym.FUNCDEF); }
     
     /*other keywords*/
     "true"             { return symbol(sym.BOOLEAN, new Boolean(true)); }

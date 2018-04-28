@@ -7,6 +7,7 @@ terminal           RPAREN, LPAREN, RBRACKET, LBRACKET, LESSER, GREATER, COMMA, C
 terminal           IF, THEN, ELSE, WHILE,  DO, BEGIN,  END;
 terminal           PRINT;
 terminal           EQ, NOTEQ, LESSEREQ, GREATEREQ, AND, OR, NOT;
+terminal           RETURN;
 terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF, CHARDEF, ARRAYDEF, FUNCDEF, STRUCTDEF;
 terminal Integer   INT;
 terminal Float     FLOAT;
@@ -57,6 +58,8 @@ statement       ::= assignment:s
                     {: RESULT = s; :}
                 | vardec:s
                     {: RESULT = s; :}
+                | RETURN boolExp:e
+                    {: RESULT = Astat.returnStatement(e); :}
                 | ifthen:s
                     {: RESULT = s; :}
                 | print:s

@@ -16,9 +16,22 @@ struct _variablename_ = {_key0_: _expression0_, _key1_; _expression1_, };
 ### struct assignment
 _variablename_->_key_ =  _expression_;
 
+### function decleration
+def _functionname_(_type0_ _argument0_, _type1_ _argument1_,)
+
+begin
+
+    ....
+
+    ....
+
+end; 
+
+### function call
+_functionname_(_expression0_, _expression1_,);
+
 ## Todo
 ### Basic Functionalities (in order of priority)
-- Implement return.
 TODO: check if local variables will have side effects on repeated function calls.( maybe clear the functions symbol table after function call? ).
 - Variable initialization.
 - Type checking.(sorta done-ish, need to display proper errors and stuff)

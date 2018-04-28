@@ -57,3 +57,11 @@ myfunction(1,"sup",);
 
 print str;
 print "from global: "+globStr;
+
+def functwo(int arg1,)
+begin
+    char wutt = "wutt";
+    return wutt+arg1;
+end;
+
+print functwo(111,);
