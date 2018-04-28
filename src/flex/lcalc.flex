@@ -148,7 +148,7 @@ comment = #.*#
     "char"             { return symbol(sym.CHARDEF, sym.CHARDEF); }
     "array"            { return symbol(sym.ARRAYDEF, sym.ARRAYDEF); }
     "struct"           { return symbol(sym.STRUCTDEF, sym.STRUCTDEF); }
-    "funcdef"          { return symbol(sym.FUNCDEF, sym.FUNCDEF); }
+    "def"          { return symbol(sym.FUNCDEF, sym.FUNCDEF); }
     
     /*other keywords*/
     "true"             { return symbol(sym.BOOLEAN, new Boolean(true)); }

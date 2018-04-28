@@ -40,3 +40,12 @@ struct person = {name : "nischal", age : 21, major: "CS", };
 print person->name;
 print person->age + 3;
 print person->name + " is " + person->age +" years old";
+
+char str="global fuck";
+def myfunction(int a, char foo,)
+begin
+    char str = "local fuck";
+    print str;
+end;
+
+print str;

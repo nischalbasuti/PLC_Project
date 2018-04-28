@@ -1,15 +1,39 @@
 package src;
 
+import java.util.HashMap;
 import java.util.Hashtable;
 
 public class SymbolTable extends Hashtable<String, MySymbol>{
 
     static SymbolTable globalTable;
+    static SymbolTable currentTable;
+    
+    static HashMap<String, SymbolTable> localSymbolTables;
     
     static {
         globalTable = new SymbolTable();
+        currentTable = new SymbolTable();
+        currentTable = globalTable;
+        
+        localSymbolTables = new HashMap<>();
     }
-
+    
+    // Create a new symbol table. should be called when a function is declared.
+    static public void createLocalSymbolTable(String functionName) {
+        SymbolTable.localSymbolTables.put(functionName, new SymbolTable());
+    }
+   
+    // Change the current symbol table to a local one. should be called when a 
+    // function is declared and at the start of a function call.
+    static public void setCurrentSymbolTableToLocal(String functionName) {
+        currentTable = localSymbolTables.get(functionName);
+    }
+    
+    // Set the current symbol table to the global symbol table. Should be called
+    // after a function decleration and after a function call.
+    static public void setCurrentSymbolTableToGlobal() {
+        currentTable = globalTable;
+    }
     
     static public void dump() {
         System.out.println("***SymbolTable Dump***");
@@ -18,32 +42,23 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     
     // Used to set the value of an existing variable.
     static void setValue(String id, MySymbol value){
-        if(globalTable.get(id).getType() != value.getType()) {
+        if(currentTable.get(id).getType() != value.getType()) {
             System.out.println("Type Error in SymbolTable.setValue()");
             SymbolTable.dump();
         }
-        // if a character type, remove the quotes
-//        if(value.getType() == sym.CHAR) {
-//            String str = value.getValue().toString();
-//            value.setValue(str.substring(1, str.length()-1));
-//        }
-        globalTable.put(id,value);
+        currentTable.put(id,value);
     }
     
-    // Used to create a new variable
+    // Used to create a new variable.
     static void declare(int type, String id, MySymbol value) {
         if(type != value.getType()) {
+            // If type being declared and the type of symbol are not the same,
+            // throw an error or something.
             System.out.println("Type Error in SymbolTable.declare() | "+type+" "+value.getType());
             SymbolTable.dump();
         }
         // TODO: handle variables that are aleady defined.
-        
-        // if a character type, remove the quotes
-//        if(value.getType() == sym.CHAR) {
-//            String str = value.getValue().toString();
-//            value.setValue(str.substring(1, str.length()-1));
-//        }
-        globalTable.put(id,value);
+        currentTable.put(id,value);
     }
     
     static void declareArray(int arraySize, String id, MySymbol value) {
@@ -53,17 +68,26 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     // Get the type of the symbol
     // i.e sym.INT/FLOAT/BOOLEAN
     static int getType(String id) {
-        return globalTable.get(id).getType();
+        return SymbolTable.getSymbol(id).getType();
     }
 
     // get the value of the Symbol.
-    // i.e. the actual integer/float/boolean values;
+    // i.e. the actual integer/float/boolean values.
     static Object getValue(String id){
-        return  globalTable.get(id).getValue();
+        return  SymbolTable.getSymbol(id).getValue();
     }
 
-    // get the Symbol object.
+    // Get the Symbol object for currentTable.
+    // if variabled doesn't exist in the current table, get value form globalTable
+    // if it exists in neither, exit the program.
     static MySymbol getSymbol(String id){
-        return  globalTable.get(id);
+        if(SymbolTable.currentTable.containsKey(id)){
+            return  SymbolTable.currentTable.get(id);    
+        } else if (SymbolTable.globalTable.containsKey(id)) {
+            return globalTable.get(id);
+        }
+        System.out.println("Variable "+id+" was not declared.");
+       // System.exit(-1);
+        return new MySymbol();
     }
 }

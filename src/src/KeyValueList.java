@@ -5,17 +5,16 @@
  */
 package src;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
- *
  * @author nischal
  */
 public class KeyValueList {
-    private LinkedList<KeyValue> keyValues = new LinkedList<>();
+    private ArrayList<KeyValue> keyValues = new ArrayList<>();
     
     public KeyValueList(KeyValue keyValue) {
-        this.keyValues = new LinkedList<>();
+        this.keyValues = new ArrayList<>();
         this.keyValues.add(keyValue);
     }
     
@@ -28,7 +27,7 @@ public class KeyValueList {
         this.keyValues.add(keyValue);
     }
     
-    public LinkedList<KeyValue> getKeyValues() {
+    public ArrayList<KeyValue> getKeyValues() {
         return this.keyValues;
     }
     

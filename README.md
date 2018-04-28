@@ -19,6 +19,7 @@ _variablename_->_key_ =  _expression_;
 ## Todo
 ### Basic Functionalities (in order of priority)
 - Implement functions (along with local and global variables).
+TODO: check if local variables will have side effects on repeated function calls.
 - Variable initialization.
 - Type checking.(sorta done-ish, need to display proper errors and stuff)
 
@@ -26,4 +27,5 @@ _variablename_->_key_ =  _expression_;
 - Add ```pass``` keyword for empty statements.
 - Extend ```if then ... else ...``` to add ```...else if then...```.
 - Implement ```for``` loop.
+- Temporary symboltable for blocks (if, while)
 

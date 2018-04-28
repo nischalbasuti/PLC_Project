@@ -14,6 +14,17 @@ public class Astat {
     public static final int RETURN_STATEMENT = 7;
     public static final int ARRAY_ASSIGNMENT = 9;
     public static final int STRUCT_ASSIGNMENT = 10;
+    
+    /*
+     * function delcaration: type functionName(args,) statement
+     */
+    MyFunction decFunction;
+    public static Astat declareFunction(MyFunction decFunction) {
+        Astat statement = new Astat();
+        statement.statementType = FUN_DECLARATION;
+        statement.decFunction = decFunction;
+        return statement;
+    }
     /*
      * decleration statement: type variable = expr
      */
@@ -214,6 +225,14 @@ public class Astat {
                 } else {
                     SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
                 }
+                break;
+            case FUN_DECLARATION:
+                SymbolTable.createLocalSymbolTable(decFunction.functionName);
+                SymbolTable.declare(sym.FUNCDEF, decFunction.functionName, new MySymbol(decFunction, sym.FUNCDEF));
+                
+                ExpList testExpList = new ExpList(new Aexp(1));
+                testExpList.append(new Aexp(2));
+                decFunction.call(testExpList);
                 break;
             case IFTHEN:
                 if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {

@@ -20,7 +20,15 @@ non terminal KeyValueList       keyValueList;
 non terminal Aexp               array, expListPart;
 non terminal Aexp               struct;
 non terminal ExpList            expList;
+
+non terminal Argument           argumentPart;
+non terminal ArgumentsList       argumentList;
+
 non terminal Object             program;
+non terminal Aexp               functionCall;
+non terminal Astat             functionDef;
+/*todo find a way to store function body, maybe in a list<Lstat>, and/or check what Astat.block is doing*/
+
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
 non terminal Lstat              statement_list;
 non terminal Aexp               expr, factor, term;
@@ -55,6 +63,8 @@ statement       ::= assignment:s
                     {: RESULT = s; :}
                 | while:s
                     {: RESULT = s; :}
+                | functionDef:f
+                    {: RESULT = f; :}
                 | BEGIN statement_list:s END
                     {: RESULT = Astat.block(s); :};
 
@@ -83,6 +93,19 @@ vardec          ::= type:t ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(a, size, i, e); :}
                 |  STRUCTDEF:s ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(s, i, e); :};
+
+argumentPart    ::= type:t ID:id
+                    {: RESULT = new Argument(t, id); :} COMMA;
+argumentList    ::= argumentList:a_list argumentPart:a
+                    {: RESULT = new ArgumentsList(a_list, a); :}
+                |   argumentPart:a
+                    {: RESULT = new ArgumentsList(a); :};
+
+functionDef     ::= FUNCDEF:f ID:i LPAREN argumentList:a_list RPAREN statement:s
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,a_list,s)); :};
+
+functionCall    ::= ID:i LPAREN expList:e_list RPAREN
+                    {:  :};
 
 type            ::= INTDEF:i
                     {: RESULT = i; :}
@@ -189,6 +212,3 @@ array          ::= LBRACKET expList:e_list RBRACKET
                    /* {a,b,c,d,}*/
 struct         ::= LBRACE keyValueList:kv_list RBRACE
                    {: RESULT = new Aexp(kv_list); :};
-
-
-/*TODO: - make a class like expList to store key-value pairs, then procede similar to arrays.*/
