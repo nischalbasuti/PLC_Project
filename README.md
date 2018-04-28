@@ -32,7 +32,7 @@ _functionname_(_expression0_, _expression1_,);
 
 ## Todo
 ### Basic Functionalities (in order of priority)
-TODO: check if local variables will have side effects on repeated function calls.( maybe clear the functions symbol table after function call? ).
+- Function with no arguments.
 - Variable initialization.
 - Type checking.(sorta done-ish, need to display proper errors and stuff)
 
@@ -40,5 +40,4 @@ TODO: check if local variables will have side effects on repeated function calls
 - Add ```pass``` keyword for empty statements.
 - Extend ```if then ... else ...``` to add ```...else if then...```.
 - Implement ```for``` loop.
-- Temporary symboltable for blocks (if, while)
 

@@ -2,6 +2,7 @@ package src;
 
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.ListIterator;
 import java.util.Stack;
 
 public class SymbolTable extends Hashtable<String, MySymbol>{
@@ -51,21 +52,22 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     
     // Used to set the value of an existing variable.
     static void setValue(String id, MySymbol value){
-        if(currentTable.containsKey(id)) {
-            if(currentTable.get(id).getType() != value.getType()) {
-                System.out.println("Type Error in SymbolTable.setValue()");
-                SymbolTable.dump();
+        
+        ListIterator<SymbolTable> iterator = SymbolTable.symbolTableStack.listIterator(SymbolTable.symbolTableStack.size());
+        
+        while(iterator.hasPrevious()) {
+            SymbolTable tempSymbolTable = iterator.previous();
+            if(tempSymbolTable.containsKey(id)) {
+                if(tempSymbolTable.get(id).getType() != value.getType()) {
+                    System.out.println("Type Error in SymbolTable.setValue()");
+                    SymbolTable.dump();
+                }
+                tempSymbolTable.put(id, value);
+                return;
             }
-            currentTable.put(id,value);            
-        } else if(globalTable.containsKey(id)) {
-            if(globalTable.get(id).getType() != value.getType()) {
-                System.out.println("Type Error in SymbolTable.setValue()");
-                SymbolTable.dump();
-            }
-            globalTable.put(id,value);            
-        } else {
-            System.out.println(id + " was not declared.");
         }
+        
+        System.out.println(id + " was not declared.");
     }
     
     // Used to create a new variable.
@@ -104,13 +106,18 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     static MySymbol getSymbol(String id){
         
         //TODO: traverse backwards in the stack instead of jumping to the globalTable if variable not found.
-        if(SymbolTable.currentTable.containsKey(id)){
-            return  SymbolTable.currentTable.get(id);    
-        } else if (SymbolTable.globalTable.containsKey(id)) {
-            return globalTable.get(id);
+        
+        ListIterator<SymbolTable> iterator = SymbolTable.symbolTableStack.listIterator(SymbolTable.symbolTableStack.size());
+        
+        while(iterator.hasPrevious()) {
+            SymbolTable tempSymbolTable = iterator.previous();
+            if(tempSymbolTable.containsKey(id)) {
+                return tempSymbolTable.get(id);
+            }
         }
+        
         System.out.println("Variable "+id+" was not declared.");
-       // System.exit(-1);
+        System.exit(-1);
         return new MySymbol();
     }
 }

@@ -17,6 +17,7 @@ begin
 
     fib[count] = prev;
 
+    # Stupid code to demonstrate boolean #
     if count >= 20-1 then
     begin
         run = false;
@@ -81,3 +82,19 @@ end;
 char returnedChar =  functwo(1,);
 print returnedChar;
 #############################
+
+
+def outerFunction(int arg1,)
+begin
+    char outerStr = "outer string";
+    def innerFunction(int arg1, )
+    begin
+        outerStr = "modified outer string";
+
+        return outerStr;
+    end;
+    print innerFunction(1,);
+    print outerStr;
+end;
+
+outerFunction(2,);
