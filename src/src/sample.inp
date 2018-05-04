@@ -6,7 +6,7 @@ int prev = 0;
 int curr = 1;
 int temp = 1;
 int count = 0; # Count number of iterations. #
-array:20 fib = [0,]; # Array to store fibbonacci series. #
+array:20 fib = [0]; # Array to store fibbonacci series. #
 boolean run = true; # Set this to false to stop while loop. #
 while run do
 begin
@@ -41,7 +41,7 @@ print "String "+str;
 # Demonstrating cartesian product(struct) #
 ###########################################
 
-struct person = {name : "nischal", age : 21, major: "CS", };
+struct person = {name : "nischal", age : 21, major: "CS"};
 print person->name;
 print person->age + 3;
 print person->name + " is " + person->age +" years old";
@@ -54,7 +54,7 @@ print person->name + " is " + person->age +" years old";
 ###########################
 char str="global fuck";
 char globStr="global fuck globStr";
-def myfunction(int a, char foo,)
+def myfunction(int a, char foo)
 begin
     char str = "local str";
     print ""+a+" "+foo+" "+str;
@@ -64,43 +64,44 @@ end;
 
 print str;
 
-myfunction(1,"sup",);
+myfunction(1,"sup");
 
 print str;
 print "from global: "+globStr;
 
-def functwo(int arg1,)
+def functwo(int arg1)
 begin
     char str = "";
     if arg1 == 1 then
     begin
-        str = str+functwo(2,);
+        str = str+functwo(2);
     end;
     return str+arg1;
 end;
 
-char returnedChar =  functwo(1,);
+char returnedChar =  functwo(1);
 print returnedChar;
 #############################
 
 
-def outerFunction(int arg1,)
+def outerFunction(int arg1)
 begin
     char outerStr = "outer string";
-    def innerFunction(int arg1, )
+    def innerFunction(int arg1)
     begin
         outerStr = "modified outer string";
 
         return outerStr;
     end;
-    print innerFunction(1,);
+    print innerFunction(1);
     print outerStr;
 end;
 
-outerFunction(2,);
+outerFunction(2);
 
 def functionWithEmptyArgs()
 begin
     print "this is a function with no arguments";
+    return 1;
 end;
 functionWithEmptyArgs();

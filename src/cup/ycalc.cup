@@ -85,9 +85,8 @@ ifthen          ::= IF boolExp:e THEN statement:s
                     {: RESULT = Astat.ifthenelse(e, s_if, s_else); :};
 
 expListPart     ::= boolExp:e
-                    {: RESULT = e;:}
-                COMMA;
-expList         ::= expList:e_list expListPart:e
+                    {: RESULT = e;:};
+expList         ::= expList:e_list COMMA expListPart:e
                     {: RESULT =  new ExpList(e_list, e); :}
                 |   expListPart:e
                     {: RESULT = new ExpList(e); :};
@@ -100,8 +99,8 @@ vardec          ::= type:t ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(s, i, e); :};
 
 argumentPart    ::= type:t ID:id
-                    {: RESULT = new Argument(t, id); :} COMMA;
-argumentList    ::= argumentList:a_list argumentPart:a
+                    {: RESULT = new Argument(t, id); :};
+argumentList    ::= argumentList:a_list COMMA argumentPart:a
                     {: RESULT = new ArgumentsList(a_list, a); :}
                 |   argumentPart:a
                     {: RESULT = new ArgumentsList(a); :};
@@ -126,9 +125,9 @@ type            ::= INTDEF:i
                     {: RESULT = c; :};
 
 keyValuePart ::= ID:i COLON boolExp:e
-                        {: RESULT = new KeyValue(i, e);:} COMMA;
+                    {: RESULT = new KeyValue(i, e); :};
 
-keyValueList    ::= keyValueList:kv_list keyValuePart:kv_part
+keyValueList    ::= keyValueList:kv_list COMMA keyValuePart:kv_part
                     {: RESULT = new KeyValueList(kv_list, kv_part); :}
                 |   keyValuePart:kv_part
                     {: RESULT = new KeyValueList(kv_part); :};
