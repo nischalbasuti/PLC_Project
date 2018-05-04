@@ -15,6 +15,10 @@ import java.util.LinkedList;
 public class ArgumentsList {
     private LinkedList<Argument> argumentsList = new LinkedList<>();
     
+    public ArgumentsList() {
+        this.argumentsList = new LinkedList<>();
+    }
+    
     public ArgumentsList(Argument argument) {
         this.argumentsList = new LinkedList<>();
         this.argumentsList.add(argument);

@@ -107,10 +107,14 @@ argumentList    ::= argumentList:a_list argumentPart:a
                     {: RESULT = new ArgumentsList(a); :};
 
 functionDef     ::= FUNCDEF:f ID:i LPAREN argumentList:a_list RPAREN BEGIN statement_list:s END
-                    {: RESULT = Astat.declareFunction(new MyFunction(i,a_list,s)); :};
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,a_list,s)); :}
+                |   FUNCDEF:f ID:i LPAREN RPAREN BEGIN statement_list:s END
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,new ArgumentsList(),s)); :};
 
 functionCall    ::= ID:i LPAREN expList:e_list RPAREN
-                    {: RESULT = new Aexp(i, e_list); :};
+                    {: RESULT = new Aexp(i, e_list); :}
+                |   ID:i LPAREN RPAREN
+                    {: ;RESULT = new Aexp(i, new ExpList()); :};
 
 type            ::= INTDEF:i
                     {: RESULT = i; :}

@@ -56,7 +56,7 @@ char str="global fuck";
 char globStr="global fuck globStr";
 def myfunction(int a, char foo,)
 begin
-    char str = "local fuck";
+    char str = "local str";
     print ""+a+" "+foo+" "+str;
     print "from local: "+globStr;
     globStr = "modified in local";
@@ -98,3 +98,9 @@ begin
 end;
 
 outerFunction(2,);
+
+def functionWithEmptyArgs()
+begin
+    print "this is a function with no arguments";
+end;
+functionWithEmptyArgs();

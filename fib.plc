@@ -1,0 +1,30 @@
+######################################
+# Program to print fibonacci series. #
+######################################
+
+def fibb(int size,)
+begin
+    int prev = 0;
+    int curr = 1;
+    int temp = 1;
+    int count = 0; # Count number of iterations. #
+    array:size fib = [0,]; # Array to store fibbonacci series. #
+    boolean run = true; # Set this to false to stop while loop. #
+    while run do
+    begin
+        temp = curr;
+        curr = prev + curr;
+        prev = temp;
+
+        fib[count] = prev;
+
+        if count >= (size-1) then
+        begin
+            run = false;
+        end;
+        count = count + 1;
+    end;
+    return fib;
+end;
+
+print fibb(20,);

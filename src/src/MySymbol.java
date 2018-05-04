@@ -198,9 +198,7 @@ public class MySymbol {
                 }
                 break;
             case sym.CHAR:
-//                if(b.getType() == sym.CHAR){
-                    retType = sym.CHAR;
-//                }
+                retType = sym.CHAR;
                 break;
         }
         if(retType == -1) {

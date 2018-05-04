@@ -14,6 +14,9 @@ import java.util.LinkedList;
 public class ExpList {
     LinkedList<Aexp> expressionList;
     
+    public ExpList(){
+        expressionList = new LinkedList<>();
+    }
     public ExpList(Aexp aexp) {
         expressionList = new LinkedList<>();
         this.expressionList.add(aexp);
