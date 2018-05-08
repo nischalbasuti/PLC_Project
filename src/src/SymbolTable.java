@@ -59,7 +59,8 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
             SymbolTable tempSymbolTable = iterator.previous();
             if(tempSymbolTable.containsKey(id)) {
                 if(tempSymbolTable.get(id).getType() != value.getType()) {
-                    System.out.println("Type Error in SymbolTable.setValue()");
+                    System.out.println("Type Error assigning ");
+                    System.out.println(">"+Lstat.current_statement.getstat());
                     SymbolTable.dump();
                 }
                 tempSymbolTable.put(id, value);
@@ -72,12 +73,11 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     
     // Used to create a new variable.
     static void declare(int type, String id, MySymbol value) {
-        if(type != value.getType()) {
+        if(SymConverter.defTypetoDataType(type) != MySymbol.getCompatableType(new MySymbol(new Object(), type),value)) {
             // If type being declared and the type of symbol are not the same,
             // throw an error or something.
-            System.out.println("Type Error in SymbolTable.declare() | "+
-                SymConverter.getTypeString(type)+" "+
-                SymConverter.getTypeString(value.getType()));
+            System.out.println("Type Error declaring");
+            System.out.println(">"+Lstat.current_statement.getstat());
             SymbolTable.dump();
         }
         // TODO: handle variables that are aleady defined.
@@ -115,6 +115,8 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
                 return tempSymbolTable.get(id);
             }
         }
+            
+//        return "[value: " + this.value.toString() + ", type: " + SymConverter.getTypeString(this.type) +"]";
         
         System.out.println("Variable "+id+" was not declared.");
         System.exit(-1);

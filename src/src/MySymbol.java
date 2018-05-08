@@ -43,7 +43,7 @@ public class MySymbol {
     //ARTHEMETIC OPERATIONS ////////////////////////////////////////////////////
     public MySymbol add(MySymbol b) {
         MySymbol retSymbol = new MySymbol();
-        retSymbol.setType( getCompatableType(this, b) );
+        retSymbol.setType( MySymbol.getCompatableType(this, b) );
         
         switch (retSymbol.getType()) {
             case sym.INT:
@@ -65,7 +65,7 @@ public class MySymbol {
     }
     public MySymbol subtract(MySymbol b) {
         MySymbol retSymbol = new MySymbol();
-        retSymbol.setType( getCompatableType(this, b) );
+        retSymbol.setType( MySymbol.getCompatableType(this, b) );
         
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() - (int)b.getValue() );
@@ -78,7 +78,7 @@ public class MySymbol {
     }
     public MySymbol divide(MySymbol b) {
         MySymbol retSymbol = new MySymbol();
-        retSymbol.setType( getCompatableType(this, b) );
+        retSymbol.setType( MySymbol.getCompatableType(this, b) );
         
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() / (int)b.getValue() );
@@ -91,7 +91,7 @@ public class MySymbol {
     }
     public MySymbol multiply(MySymbol b) {
         MySymbol retSymbol = new MySymbol();
-        retSymbol.setType( getCompatableType(this, b) );
+        retSymbol.setType( MySymbol.getCompatableType(this, b) );
         
         if(retSymbol.getType() == sym.INT) {
             retSymbol.setValue( (int)this.getValue() * (int)b.getValue() );
@@ -127,7 +127,7 @@ public class MySymbol {
     
     public boolean isGreater(MySymbol otherMySymbol) {
         boolean ret = false;
-        if(getCompatableType(this, otherMySymbol) != -1) {
+        if(MySymbol.getCompatableType(this, otherMySymbol) != -1) {
             ret =  Float.valueOf(this.getValue().toString())
                 > Float.valueOf((otherMySymbol.getValue().toString()));
         }
@@ -135,7 +135,7 @@ public class MySymbol {
     }
     public boolean isGreaterAndEqual(MySymbol otherMySymbol) {
         boolean ret = false;
-        if(getCompatableType(this, otherMySymbol) != -1) {
+        if(MySymbol.getCompatableType(this, otherMySymbol) != -1) {
             ret =  Float.valueOf(this.getValue().toString())
                 >= Float.valueOf((otherMySymbol.getValue().toString()));
         }
@@ -143,7 +143,7 @@ public class MySymbol {
     }
     public boolean isLess(MySymbol otherMySymbol) {
         boolean ret = false;
-        if(getCompatableType(this, otherMySymbol) != -1) {
+        if(MySymbol.getCompatableType(this, otherMySymbol) != -1) {
             ret =  Float.valueOf(this.getValue().toString()) 
                 < Float.valueOf((otherMySymbol.getValue().toString()));
         }
@@ -151,7 +151,7 @@ public class MySymbol {
     }
     public boolean isLessAndEqual(MySymbol otherMySymbol) {
         boolean ret = false;
-        if(getCompatableType(this, otherMySymbol) != -1) {
+        if(MySymbol.getCompatableType(this, otherMySymbol) != -1) {
             ret =  Float.valueOf(this.getValue().toString()) 
                 <= Float.valueOf((otherMySymbol.getValue().toString()));
         }
@@ -175,37 +175,73 @@ public class MySymbol {
     // This method checks if two MySymbol objects are of a compatable datatype.
     // if they are compatable, then it returns the data type of which a resulting
     // MySymbol object should be if an operation is performed on the two objects.
-    private int getCompatableType(MySymbol a, MySymbol b) {
+    public static int getCompatableType(MySymbol a, MySymbol b) {
         int retType = -1;
         switch(a.getType()) {
             case sym.INT:
-                if(b.getType() == sym.INT){
-                    retType = sym.INT;
-                } else if (b.getType() == sym.FLOAT) {
-                    retType = sym.FLOAT;
+                switch (b.getType()) {
+                    case sym.INT:
+                        retType = sym.INT;
+                        break;
+                    case sym.FLOAT:
+                        retType = sym.FLOAT;
+                        break;
+                    case sym.CHAR:
+                        retType = sym.CHAR;
+                        break;
                 }
                 break;
             case sym.FLOAT:
-                if(b.getType() == sym.INT){
-                    retType = sym.FLOAT;
-                } else if (b.getType() == sym.FLOAT) {
-                    retType = sym.FLOAT;
+                switch (b.getType()) {
+                    case sym.INT:
+                        retType = sym.FLOAT;
+                        break;
+                    case sym.FLOAT:
+                        retType = sym.FLOAT;
+                        break;
+                    case sym.CHAR:
+                        retType = sym.CHAR;
+                        break;
                 }
                 break;
             case sym.BOOLEAN:
-                if(b.getType() == sym.BOOLEAN){
-                    retType = sym.BOOLEAN;
+                switch (b.getType()) {
+                    case sym.BOOLEAN:
+                        retType = sym.BOOLEAN;
+                        break;
+                    case sym.CHAR:
+                        retType = sym.CHAR;
+                        break;
+                }
+                break;
+            case sym.ARRAY:
+                switch (b.getType()) {
+                    case sym.CHAR:
+                        retType = sym.CHAR;
+                        break;
+                }
+                break;
+            case sym.STRUCT:
+                switch (b.getType()) {
+                    case sym.CHAR:
+                        retType = sym.CHAR;
+                        break;
                 }
                 break;
             case sym.CHAR:
                 retType = sym.CHAR;
                 break;
         }
+        
+        if (a.getType() == b.getType()) {
+            retType = a.getType();
+        }
         if(retType == -1) {
-            System.out.println("Type error getCompatableType(). Symbols: " 
-                + a +  ", "+b);
-            System.out.println(SymConverter.getTypeString(a.getType()) + " and "
+//            System.out.println("Type error getCompatableType(). Symbols: " 
+//                + a +  ", "+b);
+            System.out.println("Error: "+ SymConverter.getTypeString(a.getType()) + " and "
                 + SymConverter.getTypeString(b.getType()) + " are not compatable.");
+            System.out.println(">"+Lstat.current_statement.getstat());
             System.exit(1);
         }
         return retType;
@@ -216,9 +252,7 @@ public class MySymbol {
         try{
             return this.value.toString();
         } catch (Exception e) {
-            return "NullPointerSHIZZZZZ..";
+            return "Can't convert to string "+e.getMessage();
         }
-            
-//        return "[value: " + this.value.toString() + ", type: " + SymConverter.getTypeString(this.type) +"]";
     }
 }

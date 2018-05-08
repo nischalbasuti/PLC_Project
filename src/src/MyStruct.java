@@ -25,6 +25,11 @@ public class MyStruct {
     }
     
     public MySymbol getSymbol(String key) {
+        if(!this.hashmap.containsKey(key)) {
+            System.out.println("Key out of range");
+            System.out.println(">"+Lstat.current_statement.getstat());
+            System.exit(-1);
+        }
         return this.hashmap.get(key);
     }
     

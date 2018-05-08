@@ -25,13 +25,13 @@ public class SymConverter {
     public static int defTypetoDataType(int defType) {
         switch(defType) {
             case sym.INTDEF: return sym.INT;
-            case sym.FLOATDEF: return sym.FLOATDEF;
+            case sym.FLOATDEF: return sym.FLOAT;
             case sym.BOOLEANDEF: return sym.BOOLEAN;
             case sym.CHARDEF: return sym.CHAR;
             case sym.ARRAYDEF: return sym.ARRAY;
             case sym.STRUCTDEF: return sym.STRUCT;
             default: 
-                System.err.println("SymConverter.defTypeToDataType() Undefined defType: "+defType);
+//                System.err.println("SymConverter.defTypeToDataType() Undefined defType: "+defType);
                 return defType;
         }
     }

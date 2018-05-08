@@ -1,0 +1,32 @@
+###########################
+# Demonstrating Functions #
+###########################
+char str="global thing";
+char globStr="global thing globStr";
+def myfunction(int a, char foo)
+begin
+    char str = "local str";
+    print ""+a+" "+foo+" "+str;
+    print "from local: "+globStr;
+    globStr = "modified in local";
+end;
+
+print str;
+
+myfunction(1,"sup");
+
+print str;
+print "from global: "+globStr;
+
+def functwo(int arg1)
+begin
+    char str = "";
+    if arg1 == 1 then
+    begin
+        str = str+functwo(2);
+    end;
+    return str+arg1;
+end;
+
+char returnedChar =  functwo(1);
+print returnedChar;

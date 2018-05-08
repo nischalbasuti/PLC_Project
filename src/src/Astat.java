@@ -233,10 +233,10 @@ public class Astat {
                 struct.addSymbol(assKey, assExpr.getSymbol());
                 break;
             case VAR_DECLARATION:
-                if (this.decType != decExpr.getSymbol().getType()) {
-                    System.out.println("TYPE MISS MATCH:");
-                    System.out.println(this.getstat() + " | " + decType + " " + decVariable + " " + decExpr.getSymbol().getType());
-                }
+//                if (this.decType != decExpr.getSymbol().getType()) {
+//                    System.out.println("TYPE MISS MATCH:");
+//                    System.out.println(this.getstat() + " | " + decType + " " + decVariable + " " + decExpr.getSymbol().getType());
+//                }
 
                 if (decType == sym.ARRAY) {
                     //TODO: make sure decArraySizeExp is an int

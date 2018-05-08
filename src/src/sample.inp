@@ -7,8 +7,8 @@ int curr = 1;
 int temp = 1;
 int count = 0; # Count number of iterations. #
 array:20 fib = [0]; # Array to store fibbonacci series. #
-boolean run = true; # Set this to false to stop while loop. #
-while run do
+boolean not_run = false; # Set this to false to stop while loop. #
+while not not_run do
 begin
 
     temp = curr;
@@ -20,7 +20,7 @@ begin
     # Stupid code to demonstrate boolean #
     if count >= 20-1 then
     begin
-        run = false;
+        not_run = not not_run;
     end;
 
     count = count + 1;
@@ -52,8 +52,8 @@ print person->name + " is " + person->age +" years old";
 ###########################
 # Demonstrating Functions #
 ###########################
-char str="global fuck";
-char globStr="global fuck globStr";
+char str="global thing";
+char globStr="global thing globStr";
 def myfunction(int a, char foo)
 begin
     char str = "local str";
@@ -105,3 +105,5 @@ begin
     return 1;
 end;
 functionWithEmptyArgs();
+
+float foobar = 1;

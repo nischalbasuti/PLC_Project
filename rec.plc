@@ -1,0 +1,10 @@
+def func(int a)
+begin
+    if a > 0 then
+    begin
+        print func(a-1);
+    end;
+    return a;
+end;
+
+func(10);

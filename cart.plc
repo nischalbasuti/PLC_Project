@@ -1,0 +1,5 @@
+struct person = {firstname : "Alan", lastname: "Turing", age : 21, major: "CS"};
+print person->firstname;
+print person->lastname;
+print person->age + 3;
+print person->firstname + " is " + person->age +" years old";

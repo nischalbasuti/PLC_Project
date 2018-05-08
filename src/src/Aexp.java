@@ -156,7 +156,7 @@ public class Aexp {
 
     public String getexp() {
 
-        String s = "";
+        String s = "blank"+ this.eType;
         switch (this.eType) {
             case INTEGER: s = "" + inum; break;
             case FLOAT: s = "" + inum; break;
@@ -190,20 +190,22 @@ public class Aexp {
             case CHAR: s = "" + inum; break;
             case ARRAY: s = "" + inum; break;
             case STRUCT: s = "" + inum; break;
+            case ARRAYELE: s = "" + inum; break;
+            case STRUCTELE: s = "" + inum; break;
             case ID: s = id; break;
             case EXP:
                 switch (operator) {
                     case sym.PLUS:
-                        s = "PLUS(" + operands.getfi().getexp() + "," + operands.getse().getexp() + ")";
+                        s = "" + operands.getfi().getexp() + "+" + operands.getse().getexp() + "";
                         break;
                     case sym.MINUS:
-                        s = "MINUS(" + operands.getfi().getexp() + "," + operands.getse().getexp() + ")";
+                        s = "" + operands.getfi().getexp() + "-" + operands.getse().getexp() + "";
                         break;
                     case sym.TIMES:
-                        s = "TIMES(" + operands.getfi().getexp() + "," + operands.getse().getexp() + ")";
+                        s = "" + operands.getfi().getexp() + "*" + operands.getse().getexp() + "";
                         break;
                     case sym.DIVIDE:
-                        s = "DIVIDE(" + operands.getfi().getexp() + "," + operands.getse().getexp() + ")";
+                        s = "" + operands.getfi().getexp() + "/" + operands.getse().getexp() + "";
                         break;
                     default: break;
                 } break;

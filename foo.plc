@@ -1,0 +1,6 @@
+def foobar(struct str)
+begin
+    print str;
+end;
+
+foobar({a: "asadf"});

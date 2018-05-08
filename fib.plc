@@ -2,13 +2,13 @@
 # Program to print fibonacci series. #
 ######################################
 
-def fibb(int size,)
+def fibb(int size)
 begin
     int prev = 0;
     int curr = 1;
     int temp = 1;
     int count = 0; # Count number of iterations. #
-    array:size fib = [0,]; # Array to store fibbonacci series. #
+    array:size fib = [0]; # Array to store fibbonacci series. #
     boolean run = true; # Set this to false to stop while loop. #
     while run do
     begin
@@ -27,4 +27,5 @@ begin
     return fib;
 end;
 
-print fibb(20,);
+print fibb(20);
+

@@ -38,10 +38,10 @@ non terminal Integer            type;
 
 program         ::= statement_list:s
                     {: 
-                        System.out.println("***Start of Program***");
+                        /*System.out.println("***Start of Program***");*/
                         s.execute(); 
-                        System.out.println("***End of Program***");
-                        SymbolTable.dump();
+                        /*System.out.println("***End of Program***");
+                        SymbolTable.dump();*/
                     :};
 
 
@@ -99,6 +99,10 @@ vardec          ::= type:t ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(s, i, e); :};
 
 argumentPart    ::= type:t ID:id
+                    {: RESULT = new Argument(t, id); :}
+                |   STRUCTDEF:t ID:id
+                    {: RESULT = new Argument(t, id); :}
+                |   ARRAYDEF:t ID:id
                     {: RESULT = new Argument(t, id); :};
 argumentList    ::= argumentList:a_list COMMA argumentPart:a
                     {: RESULT = new ArgumentsList(a_list, a); :}
