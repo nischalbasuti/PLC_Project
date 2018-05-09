@@ -68,7 +68,7 @@ public class MyFunction {
             System.out.println("Bad return type");
             System.exit(-1);
         }
-        System.out.println("returning : "+returnSymbol);
+//        System.out.println("returning : "+returnSymbol);
         return returnSymbol;
     }
 }

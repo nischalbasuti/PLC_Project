@@ -2,7 +2,7 @@
 # Program to print fibonacci series. #
 ######################################
 
-def fibb(int size)
+def array fibb(int size)
 begin
     int prev = 0;
     int curr = 1;
