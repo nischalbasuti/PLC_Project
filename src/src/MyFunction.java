@@ -13,10 +13,17 @@ public class MyFunction {
     Lstat statements;
     ArgumentsList argumentsList;
     String functionName;
+    public int returnType = -1;
     
     // TODO: check if return type is okay.
     MySymbol returnSymbol = new MySymbol();
 
+    public MyFunction(String functionName, ArgumentsList argumentsList, Lstat statements, int type) {
+        this.statements = statements;
+        this.argumentsList = argumentsList;
+        this.functionName = functionName;
+        this.returnType = SymConverter.defTypetoDataType(type);
+    }
     public MyFunction(String functionName, ArgumentsList argumentsList, Lstat statements) {
         this.statements = statements;
         this.argumentsList = argumentsList;
@@ -45,7 +52,7 @@ public class MyFunction {
         for (Astat statement : this.statements.statementList) {
             statement.execute();
             if (statement.statementType == Astat.RETURN_STATEMENT) {
-                this.returnSymbol = statement.returnExp.getSymbol();
+                this.returnSymbol = statement.returnSymbol;
                 break;
             }
         }
@@ -54,7 +61,14 @@ public class MyFunction {
         
         // restore the symbol table to previous scope.
         SymbolTable.popSymbolTable();
-        
+        if (this.returnType == sym.VOID) {
+            return returnSymbol;
+        }
+        if(returnSymbol.getType() != this.returnType) {
+            System.out.println("Bad return type");
+            System.exit(-1);
+        }
+        System.out.println("returning : "+returnSymbol);
         return returnSymbol;
     }
 }

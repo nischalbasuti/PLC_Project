@@ -70,7 +70,7 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
    one and nine followed by zero or more numbers between zero and nine
    or just a zero.  */
 int = 0 | [1-9][0-9]*
-float = [1-9][0-9]*\.[0-9]+
+float = [0-9]*\.[0-9]+
 char = \'[a-zA-Z0-9 :;\"_,.-]*\'|\"[a-zA-Z0-9 :;\'_,.-]*\"
 
 /* A identifier integer is a word beginning a letter between A and
@@ -145,6 +145,7 @@ comment = #.*#
     "return"           { return symbol(sym.RETURN);}
     
     /*variable declaration stuff*/
+    "void"             { return symbol(sym.VOID, sym.VOID); }
     "int"              { return symbol(sym.INTDEF, sym.INTDEF); }
     "float"            { return symbol(sym.FLOATDEF, sym.FLOATDEF); }
     "boolean"          { return symbol(sym.BOOLEANDEF, sym.BOOLEANDEF); }

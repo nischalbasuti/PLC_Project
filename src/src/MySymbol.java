@@ -19,7 +19,7 @@ public class MySymbol {
         this.type = type;
     }
     
-    public MySymbol(MySymbol symbol){
+    public MySymbol(MySymbol symbol) {
         this.value = symbol.getValue();
         this.type = symbol.getType();
     }
@@ -186,9 +186,6 @@ public class MySymbol {
                     case sym.FLOAT:
                         retType = sym.FLOAT;
                         break;
-                    case sym.CHAR:
-                        retType = sym.CHAR;
-                        break;
                 }
                 break;
             case sym.FLOAT:
@@ -199,37 +196,7 @@ public class MySymbol {
                     case sym.FLOAT:
                         retType = sym.FLOAT;
                         break;
-                    case sym.CHAR:
-                        retType = sym.CHAR;
-                        break;
                 }
-                break;
-            case sym.BOOLEAN:
-                switch (b.getType()) {
-                    case sym.BOOLEAN:
-                        retType = sym.BOOLEAN;
-                        break;
-                    case sym.CHAR:
-                        retType = sym.CHAR;
-                        break;
-                }
-                break;
-            case sym.ARRAY:
-                switch (b.getType()) {
-                    case sym.CHAR:
-                        retType = sym.CHAR;
-                        break;
-                }
-                break;
-            case sym.STRUCT:
-                switch (b.getType()) {
-                    case sym.CHAR:
-                        retType = sym.CHAR;
-                        break;
-                }
-                break;
-            case sym.CHAR:
-                retType = sym.CHAR;
                 break;
         }
         

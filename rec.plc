@@ -1,4 +1,4 @@
-def func(int a)
+def int func(int a)
 begin
     if a > 0 then
     begin

@@ -1,0 +1,9 @@
+- fixed local variables in if-else and loops.
+- added declaration without assignment.
+- declare array and string without assignment.
+- assigning of negative numbers.
+- fixed type checking.
+- fixed checking for duplicate functions.
+- fixed nested functions.
+- explicit function return types.
+- added void keyword.

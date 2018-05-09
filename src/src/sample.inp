@@ -1,109 +1,55 @@
-######################################
-# Program to print fibonacci series. #
-######################################
+##############################################################
+# Demonstrating local environment for conditionals and loops #
+##############################################################
+int a = 1;
 
-int prev = 0;
-int curr = 1;
-int temp = 1;
-int count = 0; # Count number of iterations. #
-array:20 fib = [0]; # Array to store fibbonacci series. #
-boolean not_run = false; # Set this to false to stop while loop. #
-while not not_run do
+if true then
 begin
+    int a  = 50;
+    print a;
+end;
+int foo = 1;
+while foo > 0 do
+begin
+    foo = foo - 1;
+    int a = 100;
+    print a;
+end;
+print a;
 
-    temp = curr;
-    curr = prev + curr;
-    prev = temp;
+##################################
+# Decleration without assignment #
+##################################
+char newFoo;
+newFoo = "c";
+print newFoo;
 
-    fib[count] = prev;
+########################################
+# Array Decleration without Assignment #
+########################################
+array:10 fooArray;
+fooArray[0] = 0;
+print fooArray;
 
-    # Stupid code to demonstrate boolean #
-    if count >= 20-1 then
+##############################
+# Assigning negative numbers #
+##############################
+int int_foo = -1;
+float float_foo = -1.1;
+print float_foo;
+print int_foo;
+
+############################
+# calling nested functions #
+############################
+def void func()
+begin
+    def void inner()
     begin
-        not_run = not not_run;
+        print "this is inner";
     end;
-
-    count = count + 1;
+    inner();
+    print "this is outer";
 end;
 
-count = 0;
-char str = "";
-while (count<20) do
-begin
-    str = str+", "+fib[count];
-    count = count+1;
-end;
-print "Array "+fib;
-print "String "+str;
-###########################################
-
-###########################################
-# Demonstrating cartesian product(struct) #
-###########################################
-
-struct person = {name : "nischal", age : 21, major: "CS"};
-print person->name;
-print person->age + 3;
-print person->name + " is " + person->age +" years old";
-
-###########################################
-
-
-###########################
-# Demonstrating Functions #
-###########################
-char str="global thing";
-char globStr="global thing globStr";
-def myfunction(int a, char foo)
-begin
-    char str = "local str";
-    print ""+a+" "+foo+" "+str;
-    print "from local: "+globStr;
-    globStr = "modified in local";
-end;
-
-print str;
-
-myfunction(1,"sup");
-
-print str;
-print "from global: "+globStr;
-
-def functwo(int arg1)
-begin
-    char str = "";
-    if arg1 == 1 then
-    begin
-        str = str+functwo(2);
-    end;
-    return str+arg1;
-end;
-
-char returnedChar =  functwo(1);
-print returnedChar;
-#############################
-
-
-def outerFunction(int arg1)
-begin
-    char outerStr = "outer string";
-    def innerFunction(int arg1)
-    begin
-        outerStr = "modified outer string";
-
-        return outerStr;
-    end;
-    print innerFunction(1);
-    print outerStr;
-end;
-
-outerFunction(2);
-
-def functionWithEmptyArgs()
-begin
-    print "this is a function with no arguments";
-    return 1;
-end;
-functionWithEmptyArgs();
-
-float foobar = 1;
+func();

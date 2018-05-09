@@ -8,11 +8,12 @@ terminal           IF, THEN, ELSE, WHILE,  DO, BEGIN,  END;
 terminal           PRINT;
 terminal           EQ, NOTEQ, LESSEREQ, GREATEREQ, AND, OR, NOT;
 terminal           RETURN;
-terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF, CHARDEF, ARRAYDEF, FUNCDEF, STRUCTDEF;
+terminal Integer   INTDEF, FLOATDEF, BOOLEANDEF, CHARDEF, STRINGDEF, ARRAYDEF, FUNCDEF, STRUCTDEF, VOID;
 terminal Integer   INT;
 terminal Float     FLOAT;
 terminal Boolean   BOOLEAN;
 terminal String    CHAR;
+terminal String    STRING;
 terminal String    ID;
 terminal           ARRAY, STRUCT;
 
@@ -32,6 +33,7 @@ non terminal Astat              functionDef;
 
 non terminal Astat              statement, assignment, ifthen, print, while, statement_part, vardec;
 non terminal Lstat              statement_list;
+non terminal Lstat              vardec_list;
 non terminal Aexp               expr, factor, term;
 non terminal Aexp               boolExp, boolFactor, boolTerm, relation, notFactor;
 non terminal Integer            type;
@@ -93,10 +95,16 @@ expList         ::= expList:e_list COMMA expListPart:e
 
 vardec          ::= type:t ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(t, i, e); :}
+                |    type:t ID:i
+                     {: RESULT = Astat.declare(t,i); :}
                 |  ARRAYDEF:a COLON boolExp:size ID:i ASS boolExp:e
                     {: RESULT = Astat.declare(a, size, i, e); :}
+                |  ARRAYDEF:a COLON boolExp:size ID:i
+                    {: RESULT = Astat.declareArray(a, size, i); :}
                 |  STRUCTDEF:s ID:i ASS boolExp:e
-                    {: RESULT = Astat.declare(s, i, e); :};
+                    {: RESULT = Astat.declare(s, i, e); :}
+                |  STRUCTDEF:s ID:i
+                    {: RESULT = Astat.declare(s, i); :};
 
 argumentPart    ::= type:t ID:id
                     {: RESULT = new Argument(t, id); :}
@@ -109,10 +117,18 @@ argumentList    ::= argumentList:a_list COMMA argumentPart:a
                 |   argumentPart:a
                     {: RESULT = new ArgumentsList(a); :};
 
-functionDef     ::= FUNCDEF:f ID:i LPAREN argumentList:a_list RPAREN BEGIN statement_list:s END
-                    {: RESULT = Astat.declareFunction(new MyFunction(i,a_list,s)); :}
-                |   FUNCDEF:f ID:i LPAREN RPAREN BEGIN statement_list:s END
-                    {: RESULT = Astat.declareFunction(new MyFunction(i,new ArgumentsList(),s)); :};
+functionDef     ::= FUNCDEF:f type:t  ID:i LPAREN argumentList:a_list RPAREN BEGIN statement_list:s END
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,a_list,s, t)); :}
+                |   FUNCDEF:f type:t ID:i LPAREN RPAREN BEGIN statement_list:s END
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,new ArgumentsList(),s,t)); :}
+                |   FUNCDEF:f ARRAYDEF:t  ID:i LPAREN argumentList:a_list RPAREN BEGIN statement_list:s END
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,a_list,s, t)); :}
+                |   FUNCDEF:f ARRAYDEF:t ID:i LPAREN RPAREN BEGIN statement_list:s END
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,new ArgumentsList(),s,t)); :}
+                |   FUNCDEF:f STRUCTDEF:t  ID:i LPAREN argumentList:a_list RPAREN BEGIN statement_list:s END
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,a_list,s, t)); :}
+                |   FUNCDEF:f STRUCTDEF:t ID:i LPAREN RPAREN BEGIN statement_list:s END
+                    {: RESULT = Astat.declareFunction(new MyFunction(i,new ArgumentsList(),s,t)); :};
 
 functionCall    ::= ID:i LPAREN expList:e_list RPAREN
                     {: RESULT = new Aexp(i, e_list); :}
@@ -125,6 +141,10 @@ type            ::= INTDEF:i
                     {: RESULT = f; :}
                 |  BOOLEANDEF:b
                     {: RESULT = b; :}
+                |  STRINGDEF:s
+                    {: RESULT = s; :}
+                |  VOID:v
+                    {: RESULT = v; :}
                 |  CHARDEF:c
                     {: RESULT = c; :};
 
@@ -201,10 +221,16 @@ term            ::= term:t TIMES factor:f
 
 factor          ::= LPAREN boolExp:e RPAREN
                     {: RESULT = e; :}
+                | MINUS INT:i
+                    {: RESULT = new Aexp(-i); :}
+                | MINUS FLOAT:f
+                    {: RESULT = new Aexp(-f); :}
                 | INT:i
                     {: RESULT = new Aexp(i); :}
                 | FLOAT:f
                     {: RESULT = new Aexp(f); :}
+                | STRING:s
+                    {: RESULT = new Aexp(s, false); :}
                 | CHAR:c
                     {: RESULT = new Aexp(c, false); :}
                 | array:a

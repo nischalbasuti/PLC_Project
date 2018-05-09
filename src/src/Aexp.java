@@ -263,7 +263,7 @@ public class Aexp {
                 MyFunction function = (MyFunction) SymbolTable.getSymbol(id).getValue();
                 function.call(functionArgExpList);
                 symbol = new MySymbol(function.returnSymbol);
-                
+                this.type = function.returnType;
                 break;
             case EXP:
                 left = operands.getfi();

@@ -15,6 +15,7 @@ public class Astat {
     public static final int ARRAY_ASSIGNMENT = 9;
     public static final int STRUCT_ASSIGNMENT = 10;
     public static final int BLANK_EXPRESSION = 11;
+    public static final int VAR_DECLARATION1 = 12;
     
     Aexp blankExp;
     public static Astat blankExpression(Aexp exp){
@@ -61,6 +62,27 @@ public class Astat {
         statement.decExpr = expr;
         statement.decType = SymConverter.defTypetoDataType(type);
 
+        return statement;
+    }
+    
+    public static Astat declare(int type, String variable) {
+        Astat statement = new Astat();
+        statement.statementType = VAR_DECLARATION1;
+        
+        statement.decVariable = variable;
+        statement.decType = SymConverter.defTypetoDataType(type);
+
+        return statement;
+    }
+    
+    public static Astat declareArray(int type, Aexp arraySizeExp, String variable) {
+        Astat statement = new Astat();
+        statement.statementType = VAR_DECLARATION1;
+        
+        statement.decVariable = variable;
+        statement.decType = SymConverter.defTypetoDataType(type);
+        statement.decArraySizeExp = arraySizeExp;
+        
         return statement;
     }
 
@@ -215,6 +237,7 @@ public class Astat {
         }
     }
 
+    MySymbol returnSymbol;
     public void execute() {
         // System.out.println(">> "+this.getstat());
         switch (statementType) {
@@ -233,11 +256,6 @@ public class Astat {
                 struct.addSymbol(assKey, assExpr.getSymbol());
                 break;
             case VAR_DECLARATION:
-//                if (this.decType != decExpr.getSymbol().getType()) {
-//                    System.out.println("TYPE MISS MATCH:");
-//                    System.out.println(this.getstat() + " | " + decType + " " + decVariable + " " + decExpr.getSymbol().getType());
-//                }
-
                 if (decType == sym.ARRAY) {
                     //TODO: make sure decArraySizeExp is an int
                     int arraySize = (int) decArraySizeExp.getSymbol().getValue();
@@ -248,25 +266,42 @@ public class Astat {
                     SymbolTable.declare(decType, decVariable, decExpr.getSymbol());
                 }
                 break;
+            case VAR_DECLARATION1:
+                if (decType == sym.ARRAY) {
+                    //TODO: make sure decArraySizeExp is an int
+                    int arraySize = (int) decArraySizeExp.getSymbol().getValue();
+                    MyArray newArray = new MyArray();
+                    newArray.setSize(arraySize);
+                    SymbolTable.declare(decType, decVariable, new MySymbol(newArray, decType));
+                } else {
+                    SymbolTable.declare(decType, decVariable, new MySymbol(new Object(), decType));
+                }
+                break;
             case FUN_DECLARATION:
                 SymbolTable.declare(sym.FUNCDEF, decFunction.functionName, new MySymbol(decFunction, sym.FUNCDEF));
                 break;
             case RETURN_STATEMENT:
                 // use the public variable Astat.returnExp in MyFunction.call() to get return value.
+                returnSymbol = this.returnExp.getSymbol();
                 break;
             case IFTHEN:
                 if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
+                    SymbolTable.pushSymbolTable();
                     ifbody.execute();
+                    SymbolTable.popSymbolTable();
                 }
                 break;
             case IFTHENELSE:
+                SymbolTable.pushSymbolTable();
                 if (ifcondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
                     ifbody.execute();
                 } else {
                     elsebody.execute();
                 }
+                SymbolTable.popSymbolTable();
                 break;
             case WHILELOOP:
+                SymbolTable.pushSymbolTable();
                 for (;;) {
                     if (whileCondition.getSymbol().isEqual(new MySymbol(true, sym.BOOLEAN))) {
                         whileBody.execute();
@@ -274,6 +309,7 @@ public class Astat {
                         break;
                     }
                 }
+                SymbolTable.popSymbolTable();
                 break;
             case PRINT:
                 System.out.println(printE.getSymbol());

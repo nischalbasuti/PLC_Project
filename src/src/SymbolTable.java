@@ -62,6 +62,7 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
                     System.out.println("Type Error assigning ");
                     System.out.println(">"+Lstat.current_statement.getstat());
                     SymbolTable.dump();
+                    System.exit(-1);
                 }
                 tempSymbolTable.put(id, value);
                 return;
@@ -73,12 +74,18 @@ public class SymbolTable extends Hashtable<String, MySymbol>{
     
     // Used to create a new variable.
     static void declare(int type, String id, MySymbol value) {
+        if(currentTable.containsKey(id)) {
+            System.out.println("Error: Identifier "+id+" already declared.");
+            System.out.println(">"+Lstat.current_statement.getstat());
+            System.exit(-1);
+        }
         if(SymConverter.defTypetoDataType(type) != MySymbol.getCompatableType(new MySymbol(new Object(), type),value)) {
             // If type being declared and the type of symbol are not the same,
             // throw an error or something.
             System.out.println("Type Error declaring");
             System.out.println(">"+Lstat.current_statement.getstat());
             SymbolTable.dump();
+            System.exit(-1);
         }
         // TODO: handle variables that are aleady defined.
         currentTable.put(id,value);
